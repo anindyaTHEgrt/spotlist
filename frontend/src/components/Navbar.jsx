@@ -8,7 +8,7 @@ function Navbar() {
   const handleLogin = () => {
     const clientId = "16bc716aa6a84db3979d3afff7051ac2";
     const redirectUri = "http://127.0.0.1:5174/callback";
-    const scope = "user-read-private user-read-email";
+    const scope = "user-read-private user-read-email user-library-read";
 
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&show_dialog=true`;
     window.location.href = authUrl;

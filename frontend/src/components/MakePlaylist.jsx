@@ -2,9 +2,20 @@ import React from 'react'
 import Navbar from './Navbar.jsx'
 import {Link} from 'react-router'
 import Songswipe from '../pages/Songswipe.jsx'
+import {fetchSavedTracks} from "../../../backend/utils/fetchSavedTracks.js";
 
 
 const MakePlaylist = () => {
+
+    const handleFetchTracks = async () => {
+        try {
+            const tracks = await fetchSavedTracks(localStorage.getItem("access_token"));
+            console.log("Saved tracks:", tracks);
+            // Optional: set state here to display in UI
+        } catch (err) {
+            console.error("Failed to fetch saved tracks", err);
+        }
+    };
 
     return (
         <div>
@@ -21,9 +32,12 @@ const MakePlaylist = () => {
                     Vibe
                     <input type="text" className="grow"/>
                 </label>
-                <Link to={"/songswipe"}>
-                    <button className="btn btn-primary w-1/4 justify-self-center">Create</button>
-                </Link>
+                {/*<Link to={"/songswipe"}>*/}
+                {/*    <button className="btn btn-primary w-1/4 justify-self-center" onClick={fetchSavedTracks(localStorage.getItem("access_token"))}>Create</button>*/}
+                {/*</Link>*/}
+                <button className="btn btn-primary w-1/4 justify-self-center"
+                        onClick={handleFetchTracks}>Create
+                </button>
 
             </div>
         </div>
