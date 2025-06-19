@@ -4,6 +4,7 @@ import { useEffect, useContext } from 'react';
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 import {fetchUserProfile} from "../../../backend/utils/fetchUserProfile.js"
+import axios from "axios";
 
 
 
@@ -40,15 +41,8 @@ const Callback = () => {
                 const profile = await fetchUserProfile(data.access_token);
                 console.log("👤 Spotify Profile:", profile);
                 localStorage.setItem("userID", profile.id);
-                // const exists = await chechUserExist(localStorage.getItem("userID"));
-                // if(exists){
-                //     console.log("User Exists");
-                // }
-                // else{
-                //     console.log("Registering User");
-                //     registerUser(profile);
-                // }
-
+                const userExists  =await axios.post(`http://localhost:3001/db/${profile.id}/cue`, profile);
+                console.log(userExists);
                 // Navigate back to homepage
                 navigate("/");
             } else {

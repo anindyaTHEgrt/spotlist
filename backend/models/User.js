@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
     id: {
-        type: Number,
+        type: String,
         required: true,
     },
     accessToken: {

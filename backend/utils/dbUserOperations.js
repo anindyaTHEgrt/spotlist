@@ -8,15 +8,43 @@ const checkUserExists = async (id) => {
         const UserExists = await User.exists({id:id});
         if(UserExists){
             console.log("User exists");
-            return true;
+            return UserExists;
         }
         else{
             console.log("User does not exist");
-            return false;
+            return UserExists;
         }
     }
     catch(e){
         console.error("Server error:", e);
-        return res.status(500).json({ error: "Internal server error" });
+        // return res.status(500).json({ error: "Internal server error" });
     }
 }
+
+const registerUser = async (profile) => {
+    if(!profile){
+        throw new Error("No profile provided");
+    }
+    const name= profile.name;
+    const email= profile.email;
+    const id = profile.id;
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    const profileImgUrl = profile.images[0].url;
+    const productType = profile.product;
+    const userHref = profile.href;
+
+    try {
+        const user = new User({name, email, id, accessToken, refreshToken, profileImgUrl, productType, userHref});
+        const savedUser = await user.save();
+        console.log("Saved Successfully - ",savedUser);
+        return true;
+    }
+    catch (e) {
+        console.error(e);
+        return false;
+    }
+};
+
+
+module.exports = { checkUserExists, registerUser };

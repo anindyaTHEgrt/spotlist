@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const app = express();
 const CredLoginRoutes = require('./routes/CredLoginRoutes.js');
-const dbUserFunctionRoutes = require('./routes/dbUserFunctionsRoutes');
+const dbUserFunctionRoutes = require('./routes/dbUserFunctionsRoutes.js');
 const connectDB = require('./config/db.js');
 
 app.use(cors());
