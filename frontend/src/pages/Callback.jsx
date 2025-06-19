@@ -7,6 +7,7 @@ import {fetchUserProfile} from "../../../backend/utils/fetchUserProfile.js"
 
 
 
+
 const Callback = () => {
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
@@ -38,6 +39,16 @@ const Callback = () => {
                 // Fetch user profile for testing
                 const profile = await fetchUserProfile(data.access_token);
                 console.log("👤 Spotify Profile:", profile);
+                localStorage.setItem("userID", profile.id);
+                // const exists = await chechUserExist(localStorage.getItem("userID"));
+                // if(exists){
+                //     console.log("User Exists");
+                // }
+                // else{
+                //     console.log("Registering User");
+                //     registerUser(profile);
+                // }
+
                 // Navigate back to homepage
                 navigate("/");
             } else {

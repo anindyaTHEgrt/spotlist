@@ -1,3 +1,5 @@
+
+
 export const fetchUserProfile = async (access_token) => {
     if(!access_token) {
         throw new Error("No access token provided");
@@ -12,6 +14,7 @@ export const fetchUserProfile = async (access_token) => {
             throw new Error(`Spotify API error: ${response.status}`);
         }
         const profile = await response.json();
+
         return profile;
     }
     catch(e){
