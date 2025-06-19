@@ -25,17 +25,15 @@ const registerUser = async (profile) => {
     if(!profile){
         throw new Error("No profile provided");
     }
-    const name= profile.name;
+    const name= profile.display_name;
     const email= profile.email;
     const id = profile.id;
-    const accessToken = localStorage.getItem("access_token");
-    const refreshToken = localStorage.getItem("refresh_token");
     const profileImgUrl = profile.images[0].url;
     const productType = profile.product;
     const userHref = profile.href;
 
     try {
-        const user = new User({name, email, id, accessToken, refreshToken, profileImgUrl, productType, userHref});
+        const user = new User({name, email, id, profileImgUrl, productType, userHref});
         const savedUser = await user.save();
         console.log("Saved Successfully - ",savedUser);
         return true;
