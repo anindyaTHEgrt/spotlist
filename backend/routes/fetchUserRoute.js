@@ -14,11 +14,12 @@ router.get('/profile', async (req, res) => {
     }
     try{
         const response = await fetchUserProfile(access_token);
-        console.log(response);
-        return response;
+        console.log("user profile: ",response);
+        return res.json(response);
     }
     catch(err){
         console.log("Error fetching user:", err);
+        return res.status(500).json({ error: "Failed to fetch user", details: err.message });
     }
 });
 

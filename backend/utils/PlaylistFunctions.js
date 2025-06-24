@@ -15,7 +15,7 @@ const makePlaylist = async (data) => {
         privType: false
     };
 
-    accessToken = await getAccessToken(data.id);
+    // accessToken = await getAccessToken(data.id);
 
     try{
         const response = await fetch(apiURL, {

@@ -13,9 +13,7 @@ const fetchUserProfile = async (access_token) => {
         if (!response.ok) {
             throw new Error(`Spotify API error: ${response.status}`);
         }
-        const profile = await response.json();
-
-        return profile;
+        return await response.json();
     }
     catch(e){
     console.error("Failed to reach Spotify API: ", e);
