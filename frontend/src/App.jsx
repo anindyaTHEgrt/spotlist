@@ -26,7 +26,7 @@ const App = () => {
       <Route path='/songswipe' element={<Songswipe/>}/>
       <Route path='/callback' element={<Callback/>}/>
     </Routes>
-    {/*<Footer/>*/}
+    <Footer/>
   </div>
   );
 };

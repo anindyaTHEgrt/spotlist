@@ -8,7 +8,7 @@ function Navbar() {
   const handleLogin = () => {
     const clientId = "16bc716aa6a84db3979d3afff7051ac2";
     const redirectUri = "http://127.0.0.1:5174/callback";
-    const scope = "user-read-private user-read-email user-library-read";
+    const scope = "user-read-private user-read-email user-library-read playlist-modify-public playlist-modify-private";
 
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&show_dialog=true`;
     window.location.href = authUrl;
@@ -44,7 +44,7 @@ function Navbar() {
     </div>
   </div>
   <div className="navbar-center">
-    <a className="btn btn-ghost text-xl">daisyUI</a>
+    <a className="btn btn-ghost text-xl">SpotList</a>
   </div>
         <div className="navbar-end">
           <button className="btn btn-ghost btn-circle">

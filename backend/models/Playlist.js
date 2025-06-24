@@ -1,35 +1,31 @@
 // import mongoose from 'mongoose';
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema({
-    name: {
+const PlaylistSchema = new mongoose.Schema({
+    playlistId: {
         type: String,
         required: true,
     },
-    email: {
+    playlistName: {
         type: String,
         required: true,
     },
-    id: {
+    playlistDescription: {
         type: String,
         required: true,
     },
-    profileImgUrl:{
+    userID: {
         type: String,
         required: true,
     },
-    productType:{
+    name:{
         type: String,
         required: true,
     },
-    userHref: {
-        type: String,
-        required: true,
-    },
-    accessToken: {
-        type: String,
-        required: true,
+    tracks:{
+        type: mongoose.Schema.Types.Mixed,
+        required: false,
     }
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Playlist', PlaylistSchema);

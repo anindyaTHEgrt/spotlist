@@ -7,12 +7,15 @@ require('dotenv').config();
 const app = express();
 const CredLoginRoutes = require('./routes/CredLoginRoutes.js');
 const dbUserFunctionRoutes = require('./routes/dbUserFunctionsRoutes.js');
+const PlaylistFunctionRoutes = require('./routes/PlaylistFunctionsRoutes.js');
 const connectDB = require('./config/db.js');
 
 app.use(cors());
 app.use(express.json());
 app.use("/api", CredLoginRoutes);
 app.use("/db", dbUserFunctionRoutes);
+app.use("/playlist", PlaylistFunctionRoutes);
+
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
