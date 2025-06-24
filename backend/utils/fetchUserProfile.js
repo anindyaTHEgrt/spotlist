@@ -1,6 +1,6 @@
 
 
-export const fetchUserProfile = async (access_token) => {
+const fetchUserProfile = async (access_token) => {
     if(!access_token) {
         throw new Error("No access token provided");
     }
@@ -22,3 +22,4 @@ export const fetchUserProfile = async (access_token) => {
     throw e;
     }
 };
+module.exports = {fetchUserProfile};

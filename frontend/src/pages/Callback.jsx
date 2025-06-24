@@ -83,9 +83,10 @@ const Callback = () => {
 
                         login(data.token.access_token, data.token.refresh_token);
 
-                        const profile = await fetchUserProfile(data.token.access_token);
+                        // const profile = await fetchUserProfile(data.token.access_token);
+                        const profile = await axios.get(`http://localhost:3001/user/profile?access_token=${data.token.access_token}`, {})
                         console.log("👤 Spotify Profile:", profile);
-                        localStorage.setItem("userID", profile.id);
+                        sessionStorage.setItem("userID", profile.id);
 
                         const userExists = await axios.post(
                             `http://localhost:3001/db/${profile.id}/cue`,
