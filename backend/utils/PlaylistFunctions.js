@@ -10,8 +10,8 @@ const makePlaylist = async (data) => {
 
     const apiURL = `https://api.spotify.com/v1/users/${data.id}/playlists`;
     const bodydata = {
-        name: data.name,
-        desc: data.description,
+        name: data.playlistName,
+        desc: data.vibe,
         privType: false
     };
 
@@ -21,15 +21,15 @@ const makePlaylist = async (data) => {
         const response = await fetch(apiURL, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
+                'Authorization': `Bearer ${data.accessToken}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(bodydata)
         });
-
-        console.log(response);
+        const responsedata = await response.json();
+        console.log(responsedata);
         //storing playlist in database.
-        const responseDB = await storePlaylist(response);
+        const responseDB = await storePlaylist(responsedata);
         console.log(responseDB);
         return responseDB;
     }

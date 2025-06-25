@@ -12,13 +12,9 @@ const PlaylistSchema = new mongoose.Schema({
     },
     playlistDescription: {
         type: String,
-        required: true,
+        required: false,
     },
     userID: {
-        type: String,
-        required: true,
-    },
-    name:{
         type: String,
         required: true,
     },

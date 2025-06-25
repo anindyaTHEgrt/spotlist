@@ -4,14 +4,14 @@ const storePlaylist = async (playlistData) => {
         throw new Error('No playlist Data provided provided');
     }
     try{
-        const playlistID = playlistData.id;
+        const playlistId = playlistData.id;
         const playlistName = playlistData.name;
         const playlistDescription = playlistData.description;
         const userID = playlistData.owner.id;
-        const userName = playlistData.owner.display_name;
+        console.log("DB content: ", playlistId, playlistName, userID, playlistDescription);
 
         try {
-            const playlist = new Playlist({playlistID, playlistName, playlistDescription, userID, userName});
+            const playlist = new Playlist({playlistId, playlistName, playlistDescription, userID});
             const savedPlaylist = await playlist.save();
             console.log("Saved Successfully - ",savedPlaylist);
             return true;

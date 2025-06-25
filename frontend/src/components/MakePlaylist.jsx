@@ -21,17 +21,23 @@ const MakePlaylist = () => {
     const handlePlaylistCreation = async () => {
         try{
 
+            console.log("User ID: ", sessionStorage.getItem("userID"));
+            console.log("refresh_token: ", sessionStorage.getItem("refresh_token"));
+            console.log("access_token: ", sessionStorage.getItem("access_token"));
+
+            const userID = sessionStorage.getItem("userID");
             const playlistName = document.getElementById("nameField").value;
             const vibe = document.getElementById("vibeField").value;
             const data = {
+                id: userID,
                 playlistName: playlistName,
                 vibe: vibe,
-                // accessToken: localStorage.getItem("accessToken")
+                accessToken: sessionStorage.getItem("access_token"),
             };
-            const userID = localStorage.getItem("userID");
+
             console.log("MakePlaylist: ", data);
             const sendplres = await axios.post(`http://localhost:3001/playlist/${userID}/create`, data);
-            console.log(sendplres);
+            console.log(sendplres.data);
         }
         catch (e) {
             console.error(e);
