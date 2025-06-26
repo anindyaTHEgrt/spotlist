@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar'
 import {Link} from 'react-router'
 
 import MakePlaylist from "../components/MakePlaylist.jsx";
-import Hp_bg from "../media assets/hp_bg.jpeg"
+import Hp_bg from "../media_assets/hp_bg.jpeg"
 
 
 const HomePage = () => {

@@ -1,7 +1,9 @@
 import React, {useContext} from 'react'
 import { Routes, Route } from 'react-router';
 import Callback from '../pages/Callback.jsx';
+// import handleLogin from '../FE_utils/handleLogin.jsx'
 import { AuthContext } from "../context/AuthContext";
+
 
 function Navbar() {
   const { isLoggedIn, logout } = useContext(AuthContext);
@@ -13,11 +15,9 @@ function Navbar() {
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&show_dialog=true`;
     window.location.href = authUrl;
   };
-
-
   return (
     <div>
-      <div className="navbar w-5/6 justify-self-center mt-5 rounded-full bg-emerald-900 shadow-lg shadow-gray-80  0/50 text-neutral-content ">
+      <div className="navbar w-5/6 justify-self-center mt-5 rounded-full bg-emerald-700 shadow-lg shadow-gray-80  0/50 text-neutral-content ">
   <div className="navbar-start">
     <div className="dropdown">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">

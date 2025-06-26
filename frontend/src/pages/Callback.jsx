@@ -15,7 +15,6 @@ const Callback = () => {
 
         // ✅ Prevent running twice by checking localStorage or session memory
         if (code && !sessionStorage.getItem("token_handled")) {
-            sessionStorage.setItem("token_handled", "true"); // mark as handled
 
             (async () => {
                 try {
@@ -49,6 +48,7 @@ const Callback = () => {
                         );
 
                         console.log(userExists);
+                        sessionStorage.setItem("token_handled", "true"); // mark as handled
                         navigate("/");
                     } else {
                         console.error("❌ Failed to get access token:", data);
