@@ -6,8 +6,6 @@ import TrackBG from "../media_assets/swipesong_hero_bg.jpeg"
 import {SongsCard} from "../components/SongsCard.jsx";
 
 const Songswipe = () => {
-    // const trackname = "Can't Tell Me Nothing";
-    // const artist = "Kanye West";
     return (
         <div>
             <div
@@ -18,21 +16,6 @@ const Songswipe = () => {
                 <div className="hero-overlay bg-opacity-0"></div>
                 <div className="hero-content flex flex-col items-center space-y-10 text-neutral-content text-center p-3">
                     <p className="text-sm mb-0">Now Playing</p>
-                    {/*<div id="trackDisplay"*/}
-                    {/*     className=" card w-80 bg-white/10 backdrop-blur-md border border-white/10 shadow-xl m-0">*/}
-                    {/*    <figure>*/}
-                    {/*        <img*/}
-                    {/*            src={TrackBG}*/}
-                    {/*            alt="car!" className="h-80 mt-4 rounded-md"/>*/}
-                    {/*    </figure>*/}
-
-                    {/*    <div className="card-body">*/}
-                    {/*        <p className="text-2xl">{trackname}</p>*/}
-                    {/*        <p className="text-m">{artist}</p>*/}
-
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
                     <SongsCard />
 
                     {/*PLAY CONTROLS HAVE TO BE A SEPERATE COMPONENT/*/}

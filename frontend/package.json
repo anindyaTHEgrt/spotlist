@@ -19,7 +19,8 @@
     "react-hot-toast": "^2.5.2",
     "react-router": "^7.6.2",
     "react-router-dom": "^7.6.2",
-    "react-ui-animate": "^4.3.1"
+    "react-ui-animate": "^4.3.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

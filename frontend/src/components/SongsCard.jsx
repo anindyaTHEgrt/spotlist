@@ -1,9 +1,29 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
+
+import useSocket from '../FE_utils/useSocket.js'
+
 import TrackBG from '../media_assets/swipesong_hero_bg.jpeg';
 
 export function SongsCard() {
+
+    const socketRef = useSocket((data) => {
+        console.log('ML Response: ', data);
+        alert(`ML Suggestion: ${data.recommendation}`);
+    });
+
+    const handleSwipe = (direction) => {
+        const swipeData = {
+            // id: sessionStorage.getItem("userID"),
+            userID: "1234",
+            swipe: direction,
+            songId: "xyz123",
+            timestamp: new Date().toISOString()
+        };
+        socketRef.current.emit('swipe_event', swipeData);
+    };
+
     const [{ x, y, rotateZ, scale }, api] = useSpring(() => ({
         x: 0,
         y: 0,
@@ -18,6 +38,8 @@ export function SongsCard() {
         }, 150);
     };
 
+    let choiceDirection;
+
     const bind = useDrag(({ down, movement: [mx, my], direction: [dx, dy], distance }) => {
         console.log('Drag event:', { down, mx, my, dx, dy, distance });
 
@@ -29,17 +51,23 @@ export function SongsCard() {
                     // Right swipe - Good
                     api.start({ x: 400, rotateZ: 20, scale: 1 });
                     console.log('Right swipe - Good! ✅');
+                    choiceDirection = "right";
+                    handleSwipe(choiceDirection);
                     resetCard();
                 } else {
                     // Left swipe - Reject
                     api.start({ x: -400, rotateZ: -20, scale: 1 });
                     console.log('Left swipe - Reject! ❌');
+                    choiceDirection = "left";
+                    handleSwipe(choiceDirection);
                     resetCard();
                 }
             } else if (my < 0) {
                 // Up swipe - Best
                 api.start({ y: -400, rotateZ: 0, scale: 1.1 });
                 console.log('Up swipe - Best! ⭐');
+                choiceDirection = "up"
+                handleSwipe(choiceDirection);
                 resetCard();
             } else {
                 // Down swipe or insufficient swipe - snap back
