@@ -12,15 +12,6 @@ import axios from "axios";
 
 const MakePlaylist = () => {
 
-    // const handleFetchTracks = async () => {
-    //     try {
-    //         const tracks = await fetchSavedTracks(localStorage.getItem("access_token"));
-    //         console.log("Saved tracks:", tracks);
-    //         // Optional: set state here to display in UI
-    //     } catch (err) {
-    //         console.error("Failed to fetch saved tracks", err);
-    //     }
-    // };
     const handleLogin = () => {
         const clientId = "16bc716aa6a84db3979d3afff7051ac2";
         const redirectUri = "http://127.0.0.1:5174/callback";
@@ -31,10 +22,23 @@ const MakePlaylist = () => {
     };
     const navigate = useNavigate();
     const [showAlert, setShowAlert] = useState(false);
+    const [dataEntered, setDataEntered] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const handlePLbutton = async () => {
+
+        const playlistName = document.getElementById("nameField").value;
+        const vibe = document.getElementById("vibeField").value;
+        if(!vibe || !playlistName){
+            console.log("enter content");
+            return;
+        }
+
+        setDataEntered(false);
         if(sessionStorage.getItem("token_handled")){
+            setLoading(true);
             await handlePlaylistCreation();
+            setLoading(false);
             navigate('/songswipe');
         }
         else{
@@ -64,6 +68,8 @@ const MakePlaylist = () => {
             console.log("MakePlaylist: ", data);
             const sendplres = await axios.post(`http://localhost:3001/playlist/${userID}/create`, data);
             console.log(sendplres.data);
+            const aivibeinterpretresp = await axios.post(`http://localhost:3001/intel/interpret`, {vibe: vibe});
+            console.log(aivibeinterpretresp);
         }
         catch (e) {
             console.error(e);
@@ -96,20 +102,46 @@ const MakePlaylist = () => {
                     This is where we create the foundation of your playlist! <br/>
                     Enter the name of your playlist and then tell us the vibe you are going for.
                 </p>
-                <label className="input input-bordered flex items-center gap-2">
-                    Name
-                    <input type="text" className="grow" id={"nameField"} placeholder="Midnight Drive" />
-                </label>
-                <label  className="input input-bordered flex items-center gap-2">
-                    Vibe
-                    <input id={"vibeField"} type="text" className="grow"/>
-                </label>
-                {/*<Link to={"/songswipe"}>*/}
-                {/*    <button className="btn btn-primary w-1/4 justify-self-center" onClick={fetchSavedTracks(localStorage.getItem("access_token"))}>Create</button>*/}
-                {/*</Link>*/}
-                <button className="btn btn-primary w-1/4 justify-self-center"
-                        onClick={handlePLbutton}>Create
-                </button>
+
+                {loading && (
+                    <div className="flex justify-center mt-4">
+                        <span className="loading loading-spinner loading-lg"></span>
+                    </div>
+                )}
+
+                {dataEntered && (
+                    <>
+                    <label className="input input-bordered flex items-center gap-2">
+                            Name
+                            <input type="text" className="grow" id={"nameField"} placeholder="Midnight Drive"/>
+                        </label>
+                        <label className="input input-bordered flex items-center gap-2">
+                            Vibe
+                            <input id={"vibeField"} type="text" className="grow"/>
+                        </label>
+                        {/*<Link to={"/songswipe"}>*/}
+                        {/*    <button className="btn btn-primary w-1/4 justify-self-center" onClick={fetchSavedTracks(localStorage.getItem("access_token"))}>Create</button>*/}
+                        {/*</Link>*/}
+                        <button className="btn btn-primary w-1/4 justify-self-center"
+                                onClick={handlePLbutton}>Create
+                        </button>
+                    </>
+
+                )}
+                {/*<label className="input input-bordered flex items-center gap-2">*/}
+                {/*    Name*/}
+                {/*    <input type="text" className="grow" id={"nameField"} placeholder="Midnight Drive" />*/}
+                {/*</label>*/}
+                {/*<label  className="input input-bordered flex items-center gap-2">*/}
+                {/*    Vibe*/}
+                {/*    <input id={"vibeField"} type="text" className="grow"/>*/}
+                {/*</label>*/}
+                {/*/!*<Link to={"/songswipe"}>*!/*/}
+                {/*/!*    <button className="btn btn-primary w-1/4 justify-self-center" onClick={fetchSavedTracks(localStorage.getItem("access_token"))}>Create</button>*!/*/}
+                {/*/!*</Link>*!/*/}
+                {/*<button className="btn btn-primary w-1/4 justify-self-center"*/}
+                {/*        onClick={handlePLbutton}>Create*/}
+                {/*</button>*/}
 
             </div>
 
