@@ -37,9 +37,10 @@ const MakePlaylist = () => {
         setDataEntered(false);
         if(sessionStorage.getItem("token_handled")){
             setLoading(true);
-            await handlePlaylistCreation();
+            const aiVibe = await handlePlaylistCreation();
             setLoading(false);
-            navigate('/songswipe');
+            // navigate('/songswipe', {state: {baseVibe: aiVibe}});
+            navigate(`/songswipe?baseVibe=${aiVibe}`);
         }
         else{
             setShowAlert(true);
@@ -69,7 +70,13 @@ const MakePlaylist = () => {
             const sendplres = await axios.post(`http://localhost:3001/playlist/${userID}/create`, data);
             console.log(sendplres.data);
             const aivibeinterpretresp = await axios.post(`http://localhost:3001/intel/interpret`, {vibe: vibe});
-            console.log(aivibeinterpretresp);
+            // console.log(aivibeinterpretresp);
+            const vibefromai = aivibeinterpretresp.data.candidates[0].content.parts[0].text;
+            console.log(vibefromai);
+            return vibefromai;
+            // const vibeToPy = await axios.post(`http://localhost:8001/vibe`, {vibe: vibefromai, userID: userID});
+            // console.log(vibeToPy);
+
         }
         catch (e) {
             console.error(e);
@@ -128,21 +135,6 @@ const MakePlaylist = () => {
                     </>
 
                 )}
-                {/*<label className="input input-bordered flex items-center gap-2">*/}
-                {/*    Name*/}
-                {/*    <input type="text" className="grow" id={"nameField"} placeholder="Midnight Drive" />*/}
-                {/*</label>*/}
-                {/*<label  className="input input-bordered flex items-center gap-2">*/}
-                {/*    Vibe*/}
-                {/*    <input id={"vibeField"} type="text" className="grow"/>*/}
-                {/*</label>*/}
-                {/*/!*<Link to={"/songswipe"}>*!/*/}
-                {/*/!*    <button className="btn btn-primary w-1/4 justify-self-center" onClick={fetchSavedTracks(localStorage.getItem("access_token"))}>Create</button>*!/*/}
-                {/*/!*</Link>*!/*/}
-                {/*<button className="btn btn-primary w-1/4 justify-self-center"*/}
-                {/*        onClick={handlePLbutton}>Create*/}
-                {/*</button>*/}
-
             </div>
 
         </div>

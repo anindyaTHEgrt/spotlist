@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect} from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 
@@ -6,20 +6,31 @@ import useSocket from '../FE_utils/useSocket.js'
 
 import TrackBG from '../media_assets/swipesong_hero_bg.jpeg';
 
-export function SongsCard() {
+export function SongsCard(props) {
 
+    const {baseVibe} = props;
+    console.log(baseVibe);
     const socketRef = useSocket((data) => {
         console.log('ML Response: ', data);
         alert(`ML Suggestion: ${data.recommendation}`);
     });
 
+    useEffect(() => {
+        const initialData = {
+            status: "initial",
+            baseVibe: baseVibe,
+            swipe: "null",
+            songId: "null"
+        };
+        socketRef.current.emit('swipe_event', initialData);
+    }, [baseVibe]);
+
     const handleSwipe = (direction) => {
         const swipeData = {
-            // id: sessionStorage.getItem("userID"),
-            userID: "1234",
+            status: "swipeData",
+            baseVibe: baseVibe,
             swipe: direction,
             songId: "xyz123",
-            timestamp: new Date().toISOString()
         };
         socketRef.current.emit('swipe_event', swipeData);
     };
@@ -91,7 +102,7 @@ export function SongsCard() {
     const artist = "Kanye West";
 
     return (
-        <div className="relative w-full h-[400px] flex justify-center items-center">
+        <div className="relative w-full h-[400px] flex flex-col justify-center items-center">
             <animated.div
                 {...bind()}
                 style={{
@@ -102,12 +113,10 @@ export function SongsCard() {
                     touchAction: 'none',
                     cursor: 'grab'
                 }}
-                className="select-none"
-            >
+                className="select-none">
                 <div
                     id="trackDisplay"
-                    className="card w-80 bg-white/10 backdrop-blur-md border border-white/10 shadow-xl"
-                >
+                    className="card w-80 bg-white/10 backdrop-blur-md border border-white/10 shadow-xl">
                     <figure>
                         <img src={TrackBG} alt="track" className="h-80 mt-4 rounded-md" />
                     </figure>
@@ -117,6 +126,15 @@ export function SongsCard() {
                     </div>
                 </div>
             </animated.div>
+
+            {/*PLAY CONTROLS HAVE TO BE A SEPERATE COMPONENT/*/}
+            <div id="playControls "
+                 className="card w-96 bg-white/10 mt-4 backdrop-blur-md border border-white/10 shadow-xl m-0">
+                <div className="card-body">
+                    <h2 className="card-title">Life hack</h2>
+                    <p>How to park your car at your garage?</p>
+                </div>
+            </div>
         </div>
     );
 }
