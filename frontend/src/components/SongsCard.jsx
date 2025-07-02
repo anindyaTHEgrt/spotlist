@@ -1,6 +1,7 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
+import axios from 'axios';
 
 import useSocket from '../FE_utils/useSocket.js'
 
@@ -8,14 +9,33 @@ import TrackBG from '../media_assets/swipesong_hero_bg.jpeg';
 
 export function SongsCard(props) {
 
+    const [recievedData, setRecievedData] = useState(false);
+
     let recSongID;
     const {baseVibe} = props;
     console.log(baseVibe);
     const socketRef = useSocket((data) => {
         console.log('ML Response: ', data);
         alert(`ML Suggestion: ${data.recommendation}`);
-        recSongID = data.recommendation;
+
+        const fetchTrackData = async () => {
+            try {
+                const trackData = await axios.get('http://localhost:3001/track/fetchTrack', {
+                    params: {
+                        access_token: sessionStorage.getItem("access_token"),
+                        trackID: data.recommendation
+                    }
+                });
+                console.log("Track Data:", trackData.data);
+                setRecievedData(true);
+            } catch (error) {
+                console.error("❌ Error fetching track:", error);
+            }
+        };
+
+        fetchTrackData(); // ✅ call async inner function
     });
+
 
     useEffect(() => {
         const initialData = {
@@ -28,6 +48,7 @@ export function SongsCard(props) {
     }, [baseVibe]);
 
     const handleSwipe = (direction) => {
+        setRecievedData(false);
         const swipeData = {
             status: "swipeData",
             baseVibe: baseVibe,
@@ -54,7 +75,7 @@ export function SongsCard(props) {
     let choiceDirection;
 
     const bind = useDrag(({ down, movement: [mx, my], direction: [dx, dy], distance }) => {
-        console.log('Drag event:', { down, mx, my, dx, dy, distance });
+        // console.log('Drag event:', { down, mx, my, dx, dy, distance });
 
         // Handle swipe completion when gesture ends and distance is sufficient
         if ((!down && distance[0] > 20) || (!down && distance[1] > 20)) {

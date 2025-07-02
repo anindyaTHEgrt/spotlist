@@ -18,6 +18,7 @@ const dbUserFunctionRoutes = require('./routes/dbUserFunctionsRoutes.js');
 const PlaylistFunctionRoutes = require('./routes/PlaylistFunctionsRoutes.js');
 const fetchUserRoute = require('./routes/fetchUserRoute.js');
 const aiRoutes = require('./routes/aiRoutes.js');
+const trackRoutes = require('./routes/trackRoutes.js');
 const connectDB = require('./config/db.js');
 
 app.use(cors());
@@ -27,6 +28,7 @@ app.use("/db", dbUserFunctionRoutes);
 app.use("/playlist", PlaylistFunctionRoutes);
 app.use("/user", fetchUserRoute);
 app.use("/intel", aiRoutes);
+app.use("/track", trackRoutes);
 
 
 const clientId = process.env.CLIENT_ID;
