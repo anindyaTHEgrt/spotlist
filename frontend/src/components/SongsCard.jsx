@@ -8,11 +8,13 @@ import TrackBG from '../media_assets/swipesong_hero_bg.jpeg';
 
 export function SongsCard(props) {
 
+    let recSongID;
     const {baseVibe} = props;
     console.log(baseVibe);
     const socketRef = useSocket((data) => {
         console.log('ML Response: ', data);
         alert(`ML Suggestion: ${data.recommendation}`);
+        recSongID = data.recommendation;
     });
 
     useEffect(() => {
@@ -30,7 +32,7 @@ export function SongsCard(props) {
             status: "swipeData",
             baseVibe: baseVibe,
             swipe: direction,
-            songId: "xyz123",
+            songId: recSongID,
         };
         socketRef.current.emit('swipe_event', swipeData);
     };
