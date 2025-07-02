@@ -9,14 +9,18 @@ import TrackBG from '../media_assets/swipesong_hero_bg.jpeg';
 
 export function SongsCard(props) {
 
-    const [recievedData, setRecievedData] = useState(false);
+    // const [recievedData, setRecievedData] = useState(false);
+    const latestRecommendedID = useRef(null);
+    const [recommendedTrackID, setRecommendedTrackID] = useState(null);
 
-    let recSongID;
+
     const {baseVibe} = props;
     console.log(baseVibe);
     const socketRef = useSocket((data) => {
         console.log('ML Response: ', data);
         alert(`ML Suggestion: ${data.recommendation}`);
+        setRecommendedTrackID(data.recommendation); // for UI
+        latestRecommendedID.current = data.recommendation; // for logic
 
         const fetchTrackData = async () => {
             try {
@@ -27,7 +31,7 @@ export function SongsCard(props) {
                     }
                 });
                 console.log("Track Data:", trackData.data);
-                setRecievedData(true);
+                // setRecievedData(true);
             } catch (error) {
                 console.error("❌ Error fetching track:", error);
             }
@@ -48,12 +52,17 @@ export function SongsCard(props) {
     }, [baseVibe]);
 
     const handleSwipe = (direction) => {
-        setRecievedData(false);
+        if (!latestRecommendedID.current) {
+            console.warn("⛔ Swipe ignored: recommendation not ready");
+            return;
+        }
+
+        // setRecievedData(false);
         const swipeData = {
             status: "swipeData",
             baseVibe: baseVibe,
             swipe: direction,
-            songId: recSongID,
+            songId: latestRecommendedID.current,
         };
         socketRef.current.emit('swipe_event', swipeData);
     };
