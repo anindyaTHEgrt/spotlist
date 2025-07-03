@@ -9,6 +9,10 @@ import TrackBG from '../media_assets/swipesong_hero_bg.jpeg';
 
 export function SongsCard(props) {
 
+    const trackBufferRef = useRef({ image: null, name: null, artist: null });
+    const isFirstTrackLoaded = useRef(false);
+
+
     // const [recievedData, setRecievedData] = useState(false);
     const latestRecommendedID = useRef(null);
     const [recommendedTrackID, setRecommendedTrackID] = useState(null);
@@ -34,9 +38,14 @@ export function SongsCard(props) {
                     }
                 });
                 console.log("Track Data:", trackData.data);
-                setTrackImage(trackData.data.trackImg || TrackBG); // fallback to default
-                setTrackName(trackData.data.trackName || "Unknown Track");
-                setTrackArtist(trackData.data.trackArtists || "Unknown Artist");
+                // setTrackImage(trackData.data.trackImg || TrackBG); // fallback to default
+                // setTrackName(trackData.data.trackName || "Unknown Track");
+                // setTrackArtist(trackData.data.trackArtists || "Unknown Artist");
+                trackBufferRef.current = {
+                    image: trackData.data.trackImg || TrackBG,
+                    name: trackData.data.trackName || "Unknown Track",
+                    artist: trackData.data.trackArtists || "Unknown Artist"
+                };
 
                 // setRecievedData(true);
             } catch (error) {
@@ -85,13 +94,20 @@ export function SongsCard(props) {
     const resetCard = () => {
         setTimeout(() => {
             api.start({ x: 0, y: 0, rotateZ: 0, scale: 1 });
+            const { image, name, artist } = trackBufferRef.current;
+            if (image && name && artist) {
+                setTrackImage(image);
+                setTrackName(name);
+                setTrackArtist(artist);
+                trackBufferRef.current = { image: null, name: null, artist: null }; // clear buffer
+            }
         }, 150);
     };
 
     let choiceDirection;
 
     const bind = useDrag(({ down, movement: [mx, my], direction: [dx, dy], distance }) => {
-        // console.log('Drag event:', { down, mx, my, dx, dy, distance });
+        console.log('Drag event:', { down, mx, my, dx, dy, distance });
 
         // Handle swipe completion when gesture ends and distance is sufficient
         if ((!down && distance[0] > 20) || (!down && distance[1] > 20)) {
