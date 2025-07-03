@@ -12,13 +12,16 @@ export function SongsCard(props) {
     // const [recievedData, setRecievedData] = useState(false);
     const latestRecommendedID = useRef(null);
     const [recommendedTrackID, setRecommendedTrackID] = useState(null);
+    const [trackImage, setTrackImage] = useState(TrackBG); // default image
+    const [trackName, setTrackName] = useState("Can't Tell Me Nothing");
+    const [trackArtist, setTrackArtist] = useState("Kanye West");
 
 
     const {baseVibe} = props;
     console.log(baseVibe);
     const socketRef = useSocket((data) => {
         console.log('ML Response: ', data);
-        alert(`ML Suggestion: ${data.recommendation}`);
+        // alert(`ML Suggestion: ${data.recommendation}`);
         setRecommendedTrackID(data.recommendation); // for UI
         latestRecommendedID.current = data.recommendation; // for logic
 
@@ -31,6 +34,10 @@ export function SongsCard(props) {
                     }
                 });
                 console.log("Track Data:", trackData.data);
+                setTrackImage(trackData.data.trackImg || TrackBG); // fallback to default
+                setTrackName(trackData.data.trackName || "Unknown Track");
+                setTrackArtist(trackData.data.trackArtists || "Unknown Artist");
+
                 // setRecievedData(true);
             } catch (error) {
                 console.error("❌ Error fetching track:", error);
@@ -150,11 +157,11 @@ export function SongsCard(props) {
                     id="trackDisplay"
                     className="card w-80 bg-white/10 backdrop-blur-md border border-white/10 shadow-xl">
                     <figure>
-                        <img src={TrackBG} alt="track" className="h-80 mt-4 rounded-md" />
+                        <img src={trackImage} alt="track" className="h-60 mt-4 rounded-md" />
                     </figure>
                     <div className="card-body text-white">
-                        <p className="text-2xl">{trackname}</p>
-                        <p className="text-m">{artist}</p>
+                        <p className="text-2xl">{trackName}</p>
+                        <p className="text-m">{trackArtist}</p>
                     </div>
                 </div>
             </animated.div>
