@@ -41,11 +41,24 @@ export function SongsCard(props) {
                 // setTrackImage(trackData.data.trackImg || TrackBG); // fallback to default
                 // setTrackName(trackData.data.trackName || "Unknown Track");
                 // setTrackArtist(trackData.data.trackArtists || "Unknown Artist");
-                trackBufferRef.current = {
+                const trackInfo = {
                     image: trackData.data.trackImg || TrackBG,
                     name: trackData.data.trackName || "Unknown Track",
                     artist: trackData.data.trackArtists || "Unknown Artist"
                 };
+
+                if (!isFirstTrackLoaded.current) {
+                    // 🚀 First track — apply directly
+                    setTrackImage(trackInfo.image);
+                    setTrackName(trackInfo.name);
+                    setTrackArtist(trackInfo.artist);
+                    isFirstTrackLoaded.current = true;
+                } else {
+                    // ✅ After first — store in buffer, to be used after swipe
+                    trackBufferRef.current = trackInfo;
+                    resetCard();
+                }
+
 
                 // setRecievedData(true);
             } catch (error) {
@@ -119,14 +132,14 @@ export function SongsCard(props) {
                     console.log('Right swipe - Good! ✅');
                     choiceDirection = "right";
                     handleSwipe(choiceDirection);
-                    resetCard();
+                    // resetCard();
                 } else {
                     // Left swipe - Reject
                     api.start({ x: -400, rotateZ: -20, scale: 1 });
                     console.log('Left swipe - Reject! ❌');
                     choiceDirection = "left";
                     handleSwipe(choiceDirection);
-                    resetCard();
+                    // resetCard();
                 }
             } else if (my < 0) {
                 // Up swipe - Best
@@ -134,7 +147,7 @@ export function SongsCard(props) {
                 console.log('Up swipe - Best! ⭐');
                 choiceDirection = "up"
                 handleSwipe(choiceDirection);
-                resetCard();
+                // resetCard();
             } else {
                 // Down swipe or insufficient swipe - snap back
                 api.start({ x: 0, y: 0, rotateZ: 0, scale: 1 });
