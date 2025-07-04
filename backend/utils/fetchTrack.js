@@ -13,6 +13,7 @@ const fetchTrack = async (access_token, trackID) => {
             trackName: trackData.name,
             trackImg: trackData.album.images[0].url,
             trackArtists: trackData.artists.map(a => a.name).join(", "),
+            trackUri: trackData.uri
         }
         console.log(track);
         return track;
