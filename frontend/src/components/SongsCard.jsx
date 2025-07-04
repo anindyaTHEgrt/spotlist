@@ -12,11 +12,10 @@ export function SongsCard(props) {
     const trackBufferRef = useRef({ image: null, name: null, artist: null });
     const isFirstTrackLoaded = useRef(false);
 
-
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertStatus, setAlertStatus] = useState("");  // e.g., success, warning, info
+    const [alertContent, setAlertContent] = useState("");
     const latestRecommendedID = useRef(null);
-    // const [showAlert, setShowAlert] = useState(false);
-    // const [alertStatus, setAlertStatus] = useState("");
-    // const [alertContent, setAlertContent] = useState("");
     const [recommendedTrackID, setRecommendedTrackID] = useState(null);
     const [trackUri, setTrackUri] = useState(null);
     const [trackImage, setTrackImage] = useState(TrackBG); // default image
@@ -27,10 +26,8 @@ export function SongsCard(props) {
     const baseVibe = props.baseVibe;
     const playlistName = props.playlistName;
     const playlistID = props.playlistID;
-    // console.log(baseVibe);
     const socketRef = useSocket((data) => {
         console.log('ML Response: ', data);
-        // alert(`ML Suggestion: ${data.recommendation}`);
         setRecommendedTrackID(data.recommendation); // for UI
         latestRecommendedID.current = data.recommendation; // for logic
 
@@ -45,9 +42,6 @@ export function SongsCard(props) {
                 console.log("Track Data:", trackData.data);
                 setTrackUri(trackData.data.trackUri); // for UI
 
-                // setTrackImage(trackData.data.trackImg || TrackBG); // fallback to default
-                // setTrackName(trackData.data.trackName || "Unknown Track");
-                // setTrackArtist(trackData.data.trackArtists || "Unknown Artist");
                 const trackInfo = {
                     image: trackData.data.trackImg || TrackBG,
                     name: trackData.data.trackName || "Unknown Track",
@@ -107,28 +101,25 @@ export function SongsCard(props) {
             return;
         }
 
-        if(direction === "up"){
+
+        if (direction === "right") {
+            setAlertStatus("info");
+            setAlertContent("👍 Great! More songs like this.");
+        } else if (direction === "left") {
+            setAlertStatus("warning");
+            setAlertContent("👎 Got it! Less songs like this.");
+        }
+        if (direction === "up") {
             console.log(`Added to playlist: ${playlistName}`);
-            const ans = sendToPlaylist(playlistID);
+            sendToPlaylist(playlistID); // optional: await this if you want to confirm before showing alert
+
+            setAlertStatus("success");
+            setAlertContent(`⭐ Adding this song to the playlist: ${playlistName}!`);
         }
 
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 3000); // Auto-dismiss after 3 sec
 
-        //
-        // // 🎯 Set alert content based on direction
-        // if (direction === "right") {
-        //     setAlertStatus("info");
-        //     setAlertContent("👍 Great! More songs like this.");
-        // } else if (direction === "left") {
-        //     setAlertStatus("warning");
-        //     setAlertContent("👎 Got it! Less songs like this.");
-        // } else if (direction === "up") {
-        //     setAlertStatus("success");
-        //     setAlertContent(`⭐ Adding this song to the playlist: ${playlistName} !`);
-        // }
-        // setShowAlert(true);
-        // setTimeout(() => setShowAlert(false), 3000); // Auto-dismiss after 3 sec
-
-        // setRecievedData(false);
         const swipeData = {
             status: "swipeData",
             baseVibe: baseVibe,
@@ -213,20 +204,14 @@ export function SongsCard(props) {
     return (
         <div className="relative w-full h-[400px] flex flex-col justify-center items-center">
 
-            {/*{showAlert && (*/}
-            {/*    <div role="alert" className={`alert bg-white/10 backdrop-blur-lg border border-white/10 mb-2 w-auto`}>*/}
-            {/*        <span className={`font-semibold text-xl`}>{alertContent}</span>*/}
-            {/*    </div>*/}
-            {/*)}*/}
-
-            {/*{showAlert && (*/}
-            {/*    <div*/}
-            {/*        role="alert"*/}
-            {/*        className={`alert alert-${alertStatus} w-fit mb-3 shadow-md backdrop-blur-md bg-white/10 border border-white/10 text-white`}*/}
-            {/*    >*/}
-            {/*        <span>{alertContent}</span>*/}
-            {/*    </div>*/}
-            {/*)}*/}
+            {showAlert && (
+                <div
+                    role="alert"
+                    className={`alert alert-${alertStatus} w-fit mb-3 shadow-md backdrop-blur-md bg-white/10 border border-white/10 text-white`}
+                >
+                    <span>{alertContent}</span>
+                </div>
+            )}
 
             <animated.div
                 {...bind()}
