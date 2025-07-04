@@ -15,13 +15,18 @@ export function SongsCard(props) {
 
     // const [recievedData, setRecievedData] = useState(false);
     const latestRecommendedID = useRef(null);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertStatus, setAlertStatus] = useState("");
+    const [alertContent, setAlertContent] = useState("");
     const [recommendedTrackID, setRecommendedTrackID] = useState(null);
     const [trackImage, setTrackImage] = useState(TrackBG); // default image
     const [trackName, setTrackName] = useState("Can't Tell Me Nothing");
     const [trackArtist, setTrackArtist] = useState("Kanye West");
 
 
-    const {baseVibe} = props;
+    const baseVibe = props.baseVibe;
+    const playlistName = props.playlistName;
+    const playlistID = props.playlistID;
     console.log(baseVibe);
     const socketRef = useSocket((data) => {
         console.log('ML Response: ', data);
@@ -86,6 +91,37 @@ export function SongsCard(props) {
             return;
         }
 
+        // if(direction === "right") {
+        //     setAlertStatus("info");
+        //     setAlertContent("Great! More songs like this!");
+        // }
+        // if(direction === "left") {
+        //     setAlertStatus("warning");
+        //     setAlertContent("Got It! Less songs like this!");
+        // }
+        // if(direction === "up") {
+        //     setAlertStatus("success");
+        //     setAlertContent("Amazing! Adding this song to the playlist!");
+        // }
+        // setShowAlert(true);
+        // setTimeout(() => {
+        //     setShowAlert(false);
+        // }, 4000);
+
+        // 🎯 Set alert content based on direction
+        if (direction === "right") {
+            setAlertStatus("info");
+            setAlertContent("👍 Great! More songs like this.");
+        } else if (direction === "left") {
+            setAlertStatus("warning");
+            setAlertContent("👎 Got it! Less songs like this.");
+        } else if (direction === "up") {
+            setAlertStatus("success");
+            setAlertContent(`⭐ Adding this song to the playlist: ${playlistName} !`);
+        }
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 3000); // Auto-dismiss after 3 sec
+
         // setRecievedData(false);
         const swipeData = {
             status: "swipeData",
@@ -120,7 +156,7 @@ export function SongsCard(props) {
     let choiceDirection;
 
     const bind = useDrag(({ down, movement: [mx, my], direction: [dx, dy], distance }) => {
-        console.log('Drag event:', { down, mx, my, dx, dy, distance });
+        // console.log('Drag event:', { down, mx, my, dx, dy, distance });
 
         // Handle swipe completion when gesture ends and distance is sufficient
         if ((!down && distance[0] > 20) || (!down && distance[1] > 20)) {
@@ -166,11 +202,24 @@ export function SongsCard(props) {
         });
     });
 
-    const trackname = "Can't Tell Me Nothing";
-    const artist = "Kanye West";
-
     return (
         <div className="relative w-full h-[400px] flex flex-col justify-center items-center">
+
+            {/*{showAlert && (*/}
+            {/*    <div role="alert" className={`alert bg-white/10 backdrop-blur-lg border border-white/10 mb-2 w-auto`}>*/}
+            {/*        <span className={`font-semibold text-xl`}>{alertContent}</span>*/}
+            {/*    </div>*/}
+            {/*)}*/}
+
+            {showAlert && (
+                <div
+                    role="alert"
+                    className={`alert alert-${alertStatus} w-fit mb-3 shadow-md backdrop-blur-md bg-white/10 border border-white/10 text-white`}
+                >
+                    <span>{alertContent}</span>
+                </div>
+            )}
+
             <animated.div
                 {...bind()}
                 style={{

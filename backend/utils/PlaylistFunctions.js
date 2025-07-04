@@ -31,7 +31,11 @@ const makePlaylist = async (data) => {
         //storing playlist in database.
         const responseDB = await storePlaylist(responsedata);
         console.log(responseDB);
-        return responseDB;
+        const playlistData = {
+            DBresponse: responseDB,
+            spotifyData: responsedata
+        }
+        return playlistData;
     }
     catch(error){
         console.error('Error creating playlist:', error.response?.data || error.message);

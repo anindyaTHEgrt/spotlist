@@ -37,10 +37,21 @@ const MakePlaylist = () => {
         setDataEntered(false);
         if(sessionStorage.getItem("token_handled")){
             setLoading(true);
-            const aiVibe = await handlePlaylistCreation();
+            const playdata = await handlePlaylistCreation();
+            const aiVibe = playdata.vibefromai;
+            const playlistID = playdata.playlistID;
+            const playlistName = playdata.playlistName;
+
+            console.log(playdata);
+
             setLoading(false);
             // navigate('/songswipe', {state: {baseVibe: aiVibe}});
-            navigate(`/songswipe?baseVibe=${aiVibe}`);
+            const queryParams = new URLSearchParams({
+                baseVibe: aiVibe,
+                playlistName: playlistName,
+                playlistID: playlistID
+            });
+            navigate(`/songswipe?${queryParams.toString()}`);
         }
         else{
             setShowAlert(true);
@@ -73,7 +84,12 @@ const MakePlaylist = () => {
             // console.log(aivibeinterpretresp);
             const vibefromai = aivibeinterpretresp.data.candidates[0].content.parts[0].text;
             console.log(vibefromai);
-            return vibefromai;
+            const pl = {
+                vibefromai: vibefromai,
+                playlistID: sendplres.data.spotifyData.id,
+                playlistName:  sendplres.data.spotifyData.name
+            }
+            return pl;
             // const vibeToPy = await axios.post(`http://localhost:8001/vibe`, {vibe: vibefromai, userID: userID});
             // console.log(vibeToPy);
 

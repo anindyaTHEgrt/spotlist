@@ -1,5 +1,5 @@
-import React from 'react'
-import {useSearchParams} from "react-router";
+    import React from 'react'
+import {useSearchParams, useLocation} from "react-router";
 
 import SS_H_BG from "../media_assets/swipesong_hero_bg2.jpeg"
 import TrackBG from "../media_assets/swipesong_hero_bg.jpeg"
@@ -7,10 +7,20 @@ import {SongsCard} from "../components/SongsCard.jsx";
 import useSocket from '../FE_utils/useSocket.js'
 
 const Songswipe = () => {
-    // const location = useLocation();
-    // const baseVibe = location?.state?.baseVibe;
-    const [searchParams] = useSearchParams();
-    const baseVibe = searchParams.get("baseVibe");
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const baseVibe = params.get("baseVibe");
+    const playlistName = params.get("playlistName");
+    const playlistID = params.get("playlistID");
+    // const [searchParams] = useSearchParams();
+    // const baseVibe = searchParams.get("baseVibe");
+
+    const propsData = {
+        baseVibe,
+        playlistName,
+        playlistID
+    }
+
     return (
         <div>
             <div
@@ -21,7 +31,7 @@ const Songswipe = () => {
                 <div className="hero-overlay bg-opacity-0"></div>
                 <div className="hero-content flex flex-col items-center space-y-32 text-neutral-content text-center">
                     <p className="text-sm mb-0">Now Playing</p>
-                    <SongsCard baseVibe={baseVibe} />
+                    <SongsCard {...propsData} />
 
                     {/*PLAY CONTROLS HAVE TO BE A SEPERATE COMPONENT/*/}
                     {/*<div id="playControls"*/}
