@@ -13,12 +13,12 @@ export function SongsCard(props) {
     const isFirstTrackLoaded = useRef(false);
 
 
-    // const [recievedData, setRecievedData] = useState(false);
     const latestRecommendedID = useRef(null);
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertStatus, setAlertStatus] = useState("");
-    const [alertContent, setAlertContent] = useState("");
+    // const [showAlert, setShowAlert] = useState(false);
+    // const [alertStatus, setAlertStatus] = useState("");
+    // const [alertContent, setAlertContent] = useState("");
     const [recommendedTrackID, setRecommendedTrackID] = useState(null);
+    const [trackUri, setTrackUri] = useState(null);
     const [trackImage, setTrackImage] = useState(TrackBG); // default image
     const [trackName, setTrackName] = useState("Can't Tell Me Nothing");
     const [trackArtist, setTrackArtist] = useState("Kanye West");
@@ -27,7 +27,7 @@ export function SongsCard(props) {
     const baseVibe = props.baseVibe;
     const playlistName = props.playlistName;
     const playlistID = props.playlistID;
-    console.log(baseVibe);
+    // console.log(baseVibe);
     const socketRef = useSocket((data) => {
         console.log('ML Response: ', data);
         // alert(`ML Suggestion: ${data.recommendation}`);
@@ -43,6 +43,8 @@ export function SongsCard(props) {
                     }
                 });
                 console.log("Track Data:", trackData.data);
+                setTrackUri(trackData.data.trackUri); // for UI
+
                 // setTrackImage(trackData.data.trackImg || TrackBG); // fallback to default
                 // setTrackName(trackData.data.trackName || "Unknown Track");
                 // setTrackArtist(trackData.data.trackArtists || "Unknown Artist");
@@ -74,6 +76,20 @@ export function SongsCard(props) {
         fetchTrackData(); // ✅ call async inner function
     });
 
+    const sendToPlaylist = async (playlistId) => {
+        const access_token = sessionStorage.getItem("access_token");
+        const songId = recommendedTrackID.current;
+        const data = {
+            playlistId: playlistId,
+            access_token: access_token,
+            songId: songId,
+            trackUri: trackUri
+        };
+
+        const response = await axios.post(`http://localhost:3001/playlist/addtrack`, data);
+        console.log(response);
+    }
+
 
     useEffect(() => {
         const initialData = {
@@ -91,36 +107,26 @@ export function SongsCard(props) {
             return;
         }
 
-        // if(direction === "right") {
+        if(direction === "up"){
+            console.log(`Added to playlist: ${playlistName}`);
+            const ans = sendToPlaylist(playlistID);
+        }
+
+
+        //
+        // // 🎯 Set alert content based on direction
+        // if (direction === "right") {
         //     setAlertStatus("info");
-        //     setAlertContent("Great! More songs like this!");
-        // }
-        // if(direction === "left") {
+        //     setAlertContent("👍 Great! More songs like this.");
+        // } else if (direction === "left") {
         //     setAlertStatus("warning");
-        //     setAlertContent("Got It! Less songs like this!");
-        // }
-        // if(direction === "up") {
+        //     setAlertContent("👎 Got it! Less songs like this.");
+        // } else if (direction === "up") {
         //     setAlertStatus("success");
-        //     setAlertContent("Amazing! Adding this song to the playlist!");
+        //     setAlertContent(`⭐ Adding this song to the playlist: ${playlistName} !`);
         // }
         // setShowAlert(true);
-        // setTimeout(() => {
-        //     setShowAlert(false);
-        // }, 4000);
-
-        // 🎯 Set alert content based on direction
-        if (direction === "right") {
-            setAlertStatus("info");
-            setAlertContent("👍 Great! More songs like this.");
-        } else if (direction === "left") {
-            setAlertStatus("warning");
-            setAlertContent("👎 Got it! Less songs like this.");
-        } else if (direction === "up") {
-            setAlertStatus("success");
-            setAlertContent(`⭐ Adding this song to the playlist: ${playlistName} !`);
-        }
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000); // Auto-dismiss after 3 sec
+        // setTimeout(() => setShowAlert(false), 3000); // Auto-dismiss after 3 sec
 
         // setRecievedData(false);
         const swipeData = {
@@ -139,6 +145,8 @@ export function SongsCard(props) {
         scale: 1,
         config: { tension: 300, friction: 20 }
     }));
+
+
 
     const resetCard = () => {
         setTimeout(() => {
@@ -211,14 +219,14 @@ export function SongsCard(props) {
             {/*    </div>*/}
             {/*)}*/}
 
-            {showAlert && (
-                <div
-                    role="alert"
-                    className={`alert alert-${alertStatus} w-fit mb-3 shadow-md backdrop-blur-md bg-white/10 border border-white/10 text-white`}
-                >
-                    <span>{alertContent}</span>
-                </div>
-            )}
+            {/*{showAlert && (*/}
+            {/*    <div*/}
+            {/*        role="alert"*/}
+            {/*        className={`alert alert-${alertStatus} w-fit mb-3 shadow-md backdrop-blur-md bg-white/10 border border-white/10 text-white`}*/}
+            {/*    >*/}
+            {/*        <span>{alertContent}</span>*/}
+            {/*    </div>*/}
+            {/*)}*/}
 
             <animated.div
                 {...bind()}
