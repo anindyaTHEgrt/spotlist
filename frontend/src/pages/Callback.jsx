@@ -85,6 +85,8 @@ const Callback = () => {
             <p className="text-sm sm:text-base mt-2 text-center opacity-80">
                 Please wait while we sync your vibe 🎧
             </p>
+
+
         </div>
     );
 };
