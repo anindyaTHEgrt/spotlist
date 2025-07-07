@@ -35,19 +35,9 @@ const Songswipe = () => {
                 <Intro/>
 
                 <div
-                    className="hero-content flex flex-col items-center space-y-20  text-neutral-content text-center">
+                    className="hero-content flex flex-col items-center space-y-5  text-neutral-content text-center">
                     <p className="text-sm mb-0">Now Playing</p>
                     <SongsCard {...propsData} />
-
-                    {/*PLAY CONTROLS HAVE TO BE A SEPERATE COMPONENT/*/}
-                    {/*<div id="playControls"*/}
-                    {/*     className="card w-96 bg-white/10 backdrop-blur-md border border-white/10 shadow-xl m-0">*/}
-                    {/*    <div className="card-body">*/}
-                    {/*        <h2 className="card-title">Life hack</h2>*/}
-                    {/*        <p>How to park your car at your garage?</p>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
                 </div>
             </div>
         </div>

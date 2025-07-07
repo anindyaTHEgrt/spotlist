@@ -30,8 +30,8 @@ const Callback = () => {
                     const data = await res.json();
 
                     if (data.token.access_token) {
-                        console.log("✅ Access Token:", data.token.access_token);
-                        console.log("🔁 Refresh Token:", data.token.refresh_token);
+                        // console.log("✅ Access Token:", data.token.access_token);
+                        // console.log("🔁 Refresh Token:", data.token.refresh_token);
 
                         // login(data.token.access_token, data.token.refresh_token);
                         sessionStorage.setItem("refresh_token", data.token.refresh_token);
@@ -39,7 +39,7 @@ const Callback = () => {
 
                         // const profile = await fetchUserProfile(data.token.access_token);
                         const profile = await axios.get(`http://localhost:3001/user/profile?access_token=${data.token.access_token}`, {})
-                        console.log("👤 Spotify Profile:", profile.data);
+                        // console.log("👤 Spotify Profile:", profile.data);
                         sessionStorage.setItem("userID", profile.data.id);
                         sessionStorage.setItem("product", profile.data.product);
                         // console.log("product type:", sessionStorage.getItem("product"));
@@ -52,7 +52,7 @@ const Callback = () => {
                             }
                         );
 
-                        console.log(userExists);
+                        // console.log(userExists);
                         sessionStorage.setItem("token_handled", "true"); // mark as handled
                         navigate("/");
                     } else {

@@ -41,7 +41,7 @@ export function SongsCard(props) {
         let timeoutId;
         if (isLoading) {
             timeoutId = setTimeout(() => {
-                console.log('⚠️ Loading timeout - clearing loading state');
+                // console.log('⚠️ Loading timeout - clearing loading state');
                 setIsLoading(false);
                 if (pendingSwipeRef.current) {
                     resetCard();
@@ -58,7 +58,7 @@ export function SongsCard(props) {
     }, [isLoading]);
 
     const fetchTrackData = async (recommendation) => {
-        console.log('🚀 Starting to fetch track data for ID:', recommendation);
+        // console.log('🚀 Starting to fetch track data for ID:', recommendation);
         try {
             const trackData = await axios.get('http://localhost:3001/track/fetchTrack', {
                 params: {
@@ -67,7 +67,7 @@ export function SongsCard(props) {
                 }
             });
 
-            console.log("✅ Track Data received:", trackData.data);
+            // console.log("✅ Track Data received:", trackData.data);
             setTrackUri(trackData.data.trackUri);
 
             const trackInfo = {
@@ -77,29 +77,29 @@ export function SongsCard(props) {
             };
 
             // Always update the UI immediately when new data arrives
-            console.log('🎵 Updating UI with new track:', trackInfo.name);
+            // console.log('🎵 Updating UI with new track:', trackInfo.name);
             setTrackImage(trackInfo.image);
             setTrackName(trackInfo.name);
             setTrackArtist(trackInfo.artist);
 
             if (!isFirstTrackLoaded.current) {
-                console.log('🎯 First track loaded');
+                // console.log('🎯 First track loaded');
                 isFirstTrackLoaded.current = true;
             }
 
             // Clear loading state and reset card position
-            console.log('✅ Clearing loading state');
+            // console.log('✅ Clearing loading state');
             setIsLoading(false);
             isSwipeInProgress.current = false; // Reset swipe progress
 
             if (pendingSwipeRef.current) {
-                console.log('🔄 Resetting card position');
+                // console.log('🔄 Resetting card position');
                 resetCard();
                 pendingSwipeRef.current = null;
             }
 
         } catch (error) {
-            console.error("❌ Error fetching track:", error);
+            // console.error("❌ Error fetching track:", error);
 
             // Set fallback data on error
             setTrackImage(TrackBG);
@@ -121,8 +121,8 @@ export function SongsCard(props) {
     };
 
     const socketRef = useSocket((data) => {
-        console.log('🔥 ML Response received: ', data);
-        console.log('🔥 Recommendation ID: ', data.recommendation);
+        // console.log('🔥 ML Response received: ', data);
+        // console.log('🔥 Recommendation ID: ', data.recommendation);
         setRecommendedTrackID(data.recommendation);
         latestRecommendedID.current = data.recommendation;
 
@@ -141,10 +141,10 @@ export function SongsCard(props) {
             };
 
             const response = await axios.post(`http://localhost:3001/playlist/addtrack`, data);
-            console.log("✅ Added to playlist:", response.data);
+            // console.log("✅ Added to playlist:", response.data);
             return true;
         } catch (error) {
-            console.error("❌ Error adding to playlist:", error);
+            // console.error("❌ Error adding to playlist:", error);
             return false;
         }
     }
@@ -447,7 +447,7 @@ export function SongsCard(props) {
                     role="alert"
                     className={`alert alert-${alertStatus} w-full sm:w-fit max-w-xs mb-3 shadow-md backdrop-blur-md bg-white/10 border border-white/10 text-white text-center`}
                 >
-                    <span className=" text-sm lg:text-2xl">{alertContent}</span>
+                    <span className=" text-sm lg:text-sm">{alertContent}</span>
                 </div>
             )}
 
@@ -518,8 +518,9 @@ export function SongsCard(props) {
                             </button>
 
                             <div className="flex-1 text-center sm:text-left">
-                                <div className="text-sm sm:text-sm font-semibold">{trackName}</div>
-                                <div className="text-sm opacity-80">{trackArtist}</div>
+                                <div className="text-sm sm:text-sm font-semibold ">Swipe Up to add to {playlistName}</div>
+                                <div className="text-sm opacity-80 ">Swipe right for more like this</div>
+                                <div className="text-sm opacity-80 ">Swipe left to see less </div>
                             </div>
                         </div>
                     ) : (
