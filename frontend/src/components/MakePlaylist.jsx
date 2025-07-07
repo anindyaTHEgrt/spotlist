@@ -6,7 +6,7 @@ import {Link} from 'react-router'
 import Songswipe from '../pages/Songswipe.jsx'
 // import {fetchUserProfile} from "../../../backend/utils/fetchUserProfile.js";
 import axios from "axios";
-
+import baseAxiosURL from "../lib/axios.js";
 // import {fetchSavedTracks} from "../../../backend/utils/fetchSavedTracks.js";
 
 
@@ -78,9 +78,9 @@ const MakePlaylist = () => {
             };
 
             console.log("MakePlaylist: ", data);
-            const sendplres = await axios.post(`http://localhost:3001/playlist/${userID}/create`, data);
+            const sendplres = await baseAxiosURL.post(`/playlist/${userID}/create`, data);
             console.log(sendplres.data);
-            const aivibeinterpretresp = await axios.post(`http://localhost:3001/intel/interpret`, {vibe: vibe});
+            const aivibeinterpretresp = await baseAxiosURL.post(`/intel/interpret`, {vibe: vibe});
             // console.log(aivibeinterpretresp);
             const vibefromai = aivibeinterpretresp.data.candidates[0].content.parts[0].text;
             console.log(vibefromai);

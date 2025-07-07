@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 // import {fetchUserProfile} from "../../../backend/utils/fetchUserProfile.js"
 import axios from "axios";
+import baseAxiosURL from "../lib/axios.js";
 
 import Logo from '../media_assets/spotlist-high-resolution-logo-transparent.png';
 
@@ -21,38 +22,36 @@ const Callback = () => {
 
             (async () => {
                 try {
-                    const res = await fetch("http://localhost:3001/api/token", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ code }),
+                    const res = await baseAxiosURL.post("/api/token", { code }, {
+                        headers: { "Content-Type": "application/json" }
                     });
 
-                    const data = await res.json();
+                    const data = res.data;
+                    console.log(data);
 
                     if (data.token.access_token) {
-                        // console.log("✅ Access Token:", data.token.access_token);
-                        // console.log("🔁 Refresh Token:", data.token.refresh_token);
+                        console.log("✅ Access Token:", data.token.access_token);
+                        console.log("🔁 Refresh Token:", data.token.refresh_token);
 
                         // login(data.token.access_token, data.token.refresh_token);
                         sessionStorage.setItem("refresh_token", data.token.refresh_token);
                         sessionStorage.setItem("access_token", data.token.access_token);
 
                         // const profile = await fetchUserProfile(data.token.access_token);
-                        const profile = await axios.get(`http://localhost:3001/user/profile?access_token=${data.token.access_token}`, {})
-                        // console.log("👤 Spotify Profile:", profile.data);
+                        const profile = await baseAxiosURL.get(`/user/profile?access_token=${data.token.access_token}`, {})
+                        console.log("👤 Spotify Profile:", profile.data);
                         sessionStorage.setItem("userID", profile.data.id);
                         sessionStorage.setItem("product", profile.data.product);
                         // console.log("product type:", sessionStorage.getItem("product"));
 
-                        const userExists = await axios.post(
-                            `http://localhost:3001/db/${profile.data.id}/cue`,
+                        const userExists = await baseAxiosURL.post(`http://localhost:3001/db/${profile.data.id}/cue`,
                             {
                                 profile: profile.data,
                                 accessToken: data.token.access_token,
                             }
                         );
 
-                        // console.log(userExists);
+                        console.log(userExists);
                         sessionStorage.setItem("token_handled", "true"); // mark as handled
                         navigate("/");
                     } else {

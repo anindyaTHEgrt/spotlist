@@ -5,7 +5,7 @@ const { Server } = require('socket.io');
 const WebSocket = require('ws');
 const http = require('http');
 
-require('dotenv').config();
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 
 const app = express();
 

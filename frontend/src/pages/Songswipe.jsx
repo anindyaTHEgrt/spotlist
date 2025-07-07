@@ -13,8 +13,6 @@ const Songswipe = () => {
     const baseVibe = params.get("baseVibe");
     const playlistName = params.get("playlistName");
     const playlistID = params.get("playlistID");
-    // const [searchParams] = useSearchParams();
-    // const baseVibe = searchParams.get("baseVibe");
 
     const propsData = {
         baseVibe,

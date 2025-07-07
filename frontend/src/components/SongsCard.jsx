@@ -2,6 +2,7 @@ import React, {useRef, useEffect, useState} from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import axios from 'axios';
+import baseAxiosURL from "../lib/axios.js";
 
 import useSocket from '../FE_utils/useSocket.js'
 
@@ -60,7 +61,7 @@ export function SongsCard(props) {
     const fetchTrackData = async (recommendation) => {
         // console.log('🚀 Starting to fetch track data for ID:', recommendation);
         try {
-            const trackData = await axios.get('http://localhost:3001/track/fetchTrack', {
+            const trackData = await baseAxiosURL.get('/track/fetchTrack', {
                 params: {
                     access_token: sessionStorage.getItem("access_token"),
                     trackID: recommendation
@@ -99,7 +100,7 @@ export function SongsCard(props) {
             }
 
         } catch (error) {
-            // console.error("❌ Error fetching track:", error);
+            console.error("❌ Error fetching track:", error);
 
             // Set fallback data on error
             setTrackImage(TrackBG);
@@ -140,11 +141,11 @@ export function SongsCard(props) {
                 trackUri: trackUri
             };
 
-            const response = await axios.post(`http://localhost:3001/playlist/addtrack`, data);
-            // console.log("✅ Added to playlist:", response.data);
+            const response = await baseAxiosURL.post(`/playlist/addtrack`, data);
+            console.log("✅ Added to playlist:", response.data);
             return true;
         } catch (error) {
-            // console.error("❌ Error adding to playlist:", error);
+            console.error("❌ Error adding to playlist:", error);
             return false;
         }
     }
@@ -295,17 +296,6 @@ export function SongsCard(props) {
             });
         }
     });
-
-    // Debug button (remove in production)
-    const handleDebugClearLoading = () => {
-        console.log('🔧 DEBUG: Manually clearing loading state');
-        setIsLoading(false);
-        isSwipeInProgress.current = false;
-        if (pendingSwipeRef.current) {
-            resetCard();
-            pendingSwipeRef.current = null;
-        }
-    };
 
 
     // Initialize Spotify Web Playback SDK
