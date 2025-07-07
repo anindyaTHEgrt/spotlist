@@ -19,7 +19,7 @@ const App = () => {
   // };
 
   return( 
-  <div data-theme="forest">
+  <div data-theme="forest" className="min-h-screen w-full overflow-x-hidden">
     <Navbar/>
     <Routes>
       <Route path='/' element={<HomePage/>}/>

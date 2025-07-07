@@ -24,12 +24,12 @@ const Songswipe = () => {
     return (
         <div>
             <div
-                className="hero w-5/6 justify-self-center h-screen mt-5 rounded-md p-0"
+                className="hero w-full max-w-7xl mx-auto h-screen mt-5 rounded-md"
                 style={{
                     backgroundImage: `url(${SS_H_BG})`,
                 }}>
                 <div className="hero-overlay bg-opacity-0"></div>
-                <div className="hero-content flex flex-col items-center space-y-32 text-neutral-content text-center">
+                <div className="hero-content flex flex-col items-center space-y-20  text-neutral-content text-center">
                     <p className="text-sm mb-0">Now Playing</p>
                     <SongsCard {...propsData} />
 

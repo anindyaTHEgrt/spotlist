@@ -16,7 +16,7 @@ const HomePage = () => {
   return (
       <div>
           <div
-              className="hero w-5/6 justify-self-center h-screen mt-7 rounded-md"
+              className="hero w-full md:w-5/6 justify-self-center h-screen mt-7 rounded-md"
               style={{
                   backgroundImage: `url(${Hp_bg})`,
               }}>

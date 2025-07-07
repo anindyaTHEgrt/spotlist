@@ -57,7 +57,7 @@ const MakePlaylist = () => {
             setShowAlert(true);
             setTimeout(() => {
                 setShowAlert(false);
-            }, 6000);
+            }, 10000);
         }
     }
 
@@ -102,7 +102,7 @@ const MakePlaylist = () => {
     return (
         <div>
             {showAlert && (
-                <div role="alert" className="alert justify-self-center w-1/3 mt-4 bg-emerald-700">
+                <div role="alert" className="alert w-full max-w-md mx-auto mt-2 lg:mt-4 bg-emerald-700 text-white">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -120,8 +120,8 @@ const MakePlaylist = () => {
                     </div>
                 </div>
             )}
-            <div className=" w-3/6 mt-4 justify-self-center space-y-3 mb-8">
-                <p className="mb-5 text-2xl text-center">
+            <div className="w-4/5 lg:w-3/6 mt-4 justify-self-center space-y-3 mb-8">
+                <p className="mb-5 text-xl lg:text-2xl text-center">
                     This is where we create the foundation of your playlist! <br/>
                     Enter the name of your playlist and then tell us the vibe you are going for.
                 </p>
@@ -145,7 +145,7 @@ const MakePlaylist = () => {
                         {/*<Link to={"/songswipe"}>*/}
                         {/*    <button className="btn btn-primary w-1/4 justify-self-center" onClick={fetchSavedTracks(localStorage.getItem("access_token"))}>Create</button>*/}
                         {/*</Link>*/}
-                        <button className="btn btn-primary w-1/4 justify-self-center"
+                        <button className="btn btn-primary w-full lg:w-1/4 justify-self-center"
                                 onClick={handlePLbutton}>Create
                         </button>
                     </>

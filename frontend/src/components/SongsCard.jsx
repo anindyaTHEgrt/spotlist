@@ -438,27 +438,20 @@ export function SongsCard(props) {
     };
 
     return (
-        <div className="relative w-full h-[400px] flex flex-col justify-center items-center">
+        <div
+            className="relative w-full max-w-4xl mx-auto px-4 h-fit flex flex-col justify-center items-center overflow-x-hidden">
 
-            {/* Debug button - remove in production */}
-            {isLoading && (
-                <button
-                    onClick={handleDebugClearLoading}
-                    className="absolute top-0 right-0 z-50 bg-red-500 text-white px-2 py-1 rounded text-xs"
-                >
-                    Clear Loading
-                </button>
-            )}
-
+            {/* Alert */}
             {showAlert && (
                 <div
                     role="alert"
-                    className={`alert alert-${alertStatus} w-fit mb-3 shadow-md backdrop-blur-md bg-white/10 border border-white/10 text-white`}
+                    className={`alert alert-${alertStatus} w-full sm:w-fit max-w-xs mb-3 shadow-md backdrop-blur-md bg-white/10 border border-white/10 text-white text-center`}
                 >
-                    <span>{alertContent}</span>
+                    <span className=" text-sm lg:text-2xl">{alertContent}</span>
                 </div>
             )}
 
+            {/* Track Card */}
             <animated.div
                 {...bind()}
                 style={{
@@ -467,85 +460,82 @@ export function SongsCard(props) {
                     rotateZ,
                     scale,
                     touchAction: 'none',
-                    cursor: isLoading ? 'wait' : 'grab'
+                    cursor: isLoading ? 'wait' : 'grab',
                 }}
-                className="select-none">
+                className="select-none w-full sm:w-80"
+            >
                 <div
                     id="trackDisplay"
-                    className={`card w-80 bg-white/10 backdrop-blur-md border border-white/10 shadow-xl ${isLoading ? 'opacity-70' : ''}`}>
+                    className={`card w-full bg-white/10 backdrop-blur-md border border-white/10 shadow-xl ${
+                        isLoading ? 'opacity-70' : ''
+                    }`}
+                >
                     <figure className="relative">
-                        <img src={trackImage} alt="track" className="h-60 mt-4 rounded-md"/>
+                        <img src={trackImage} alt="track" className="h-60 mt-4 rounded-md w-full object-cover"/>
                         {isLoading && (
                             <div
                                 className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md mt-4">
-                                <div className="loading loading-spinner loading-lg text-white"></div>
+                                <div className="loading loading-spinner loading-lg text-white"/>
                             </div>
                         )}
                     </figure>
                     <div className="card-body text-white">
-                        <p className="text-2xl">{trackName}</p>
-                        <p className="text-m">{trackArtist}</p>
-                        {isLoading && (
-                            <p className="text-sm opacity-70">Loading next track...</p>
-                        )}
+                        <p className="text-lg sm:text-xl md:text-2xl font-bold">{trackName}</p>
+                        <p className="text-sm md:text-base">{trackArtist}</p>
+                        {isLoading && <p className="text-sm opacity-70">Loading next track...</p>}
                     </div>
                 </div>
             </animated.div>
 
-            {/*<div id="playControls"*/}
-            {/*     className="card w-96 bg-white/10 mt-4 backdrop-blur-md border border-white/10 shadow-xl m-0">*/}
-            {/*    <div className="card-body">*/}
-            {/*        <h2 className="card-title">Life hack</h2>*/}
-            {/*        <p>How to park your car at your garage?</p>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-            <div id="playControls"
-                 className="card w-96 bg-white/10 mt-4 backdrop-blur-md border border-white/10 shadow-xl m-0">
-
-
-
+            {/* Player Controls */}
+            <div
+                id="playControls"
+                className="card w-full sm:w-96 bg-white/10 mt-4 backdrop-blur-md border border-white/10 shadow-xl"
+            >
                 <div className="card-body">
                     {premium ? (
-                    <div className="flex items-center justify-center gap-4">
-                        <button
-                            onClick={togglePlayback}
-                            className="btn btn-circle btn-primary"
-                            disabled={!playerReady || !trackUri}
-                        >
-                            {isPlaying ? (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none"
-                                     viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                          d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            ) : (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none"
-                                     viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                          d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            )}
-                        </button>
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <button
+                                onClick={togglePlayback}
+                                className="btn btn-circle btn-primary"
+                                disabled={!playerReady || !trackUri}
+                            >
+                                {isPlaying ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 lg:h-6 lg:w-6" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                              d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 lg:h-6 lg:w-6" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                )}
+                            </button>
 
-                        <div className="flex-1">
-                            <div className="text-lg font-semibold">{trackName}</div>
-                            <div className="text-sm opacity-80">{trackArtist}</div>
+                            <div className="flex-1 text-center sm:text-left">
+                                <div className="text-sm sm:text-sm font-semibold">{trackName}</div>
+                                <div className="text-sm opacity-80">{trackArtist}</div>
+                            </div>
                         </div>
-                    </div>
-
                     ) : (
-                        <div className="text-lg font-semibold">Track Player requires premium subscription</div>
+                        <div className="text-sm lg:text-md text-amber-950 font-bold text-center">
+                            Track Player requires premium subscription
+                        </div>
                     )}
 
                     {!playerReady && (
-                        <div className="text-sm text-warning mt-2">
+                        <div className="text-sm text-warning mt-0 lg:mt-2 text-center">
                             Connecting to Spotify player...
                         </div>
                     )}
                 </div>
             </div>
         </div>
-);
+
+    );
 }
