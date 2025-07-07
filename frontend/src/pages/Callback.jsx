@@ -44,7 +44,7 @@ const Callback = () => {
                         sessionStorage.setItem("product", profile.data.product);
                         // console.log("product type:", sessionStorage.getItem("product"));
 
-                        const userExists = await baseAxiosURL.post(`http://localhost:3001/db/${profile.data.id}/cue`,
+                        const userExists = await baseAxiosURL.post(`/db/${profile.data.id}/cue`,
                             {
                                 profile: profile.data,
                                 accessToken: data.token.access_token,

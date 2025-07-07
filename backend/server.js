@@ -20,8 +20,17 @@ const fetchUserRoute = require('./routes/fetchUserRoute.js');
 const aiRoutes = require('./routes/aiRoutes.js');
 const trackRoutes = require('./routes/trackRoutes.js');
 const connectDB = require('./config/db.js');
+const path = require("node:path");
 
-app.use(cors());
+if(process.env.NODE_ENV !== 'production') {
+    console.log("not in production");
+    app.use(cors());
+}
+else{
+    console.log("in production");
+
+}
+
 app.use(express.json());
 app.use("/api", CredLoginRoutes);
 app.use("/db", dbUserFunctionRoutes);
@@ -31,9 +40,20 @@ app.use("/intel", aiRoutes);
 app.use("/track", trackRoutes);
 
 
+
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+    })
+}
+
+
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirect_uri = 'http://127.0.0.1:5174/callback';
+
 
 connectDB();
 
