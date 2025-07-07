@@ -38,6 +38,8 @@ const Callback = () => {
                         const profile = await axios.get(`http://localhost:3001/user/profile?access_token=${data.token.access_token}`, {})
                         console.log("👤 Spotify Profile:", profile.data);
                         sessionStorage.setItem("userID", profile.data.id);
+                        sessionStorage.setItem("product", profile.data.product);
+                        // console.log("product type:", sessionStorage.getItem("product"));
 
                         const userExists = await axios.post(
                             `http://localhost:3001/db/${profile.data.id}/cue`,

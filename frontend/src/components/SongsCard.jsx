@@ -34,6 +34,8 @@ export function SongsCard(props) {
     const playlistName = props.playlistName;
     const playlistID = props.playlistID;
 
+    const premium = sessionStorage.getItem("product") === "premium";
+
     // Add safety timeout for loading state
     useEffect(() => {
         let timeoutId;
@@ -305,57 +307,65 @@ export function SongsCard(props) {
         }
     };
 
+
     // Initialize Spotify Web Playback SDK
     useEffect(() => {
-        const script = document.createElement('script');
-        script.src = 'https://sdk.scdn.co/spotify-player.js';
-        script.async = true;
-        document.body.appendChild(script);
+        if(sessionStorage.getItem("product") === "premium") {
+            const script = document.createElement('script');
+            script.src = 'https://sdk.scdn.co/spotify-player.js';
+            script.async = true;
+            document.body.appendChild(script);
 
-        window.onSpotifyWebPlaybackSDKReady = () => {
-            const player = new window.Spotify.Player({
-                name: 'SwipeSong Player',
-                getOAuthToken: cb => {
-                    cb(sessionStorage.getItem("access_token"));
-                },
-                volume: 0.5
-            });
+            window.onSpotifyWebPlaybackSDKReady = () => {
+                const player = new window.Spotify.Player({
+                    name: 'SwipeSong Player',
+                    getOAuthToken: cb => {
+                        cb(sessionStorage.getItem("access_token"));
+                    },
+                    volume: 0.5
+                });
 
-            playerRef.current = player;
+                playerRef.current = player;
 
-            player.addListener('ready', ({ device_id }) => {
-                console.log('Spotify Player Ready with Device ID', device_id);
-                deviceIdRef.current = device_id;
-                setPlayerReady(true);
-            });
+                player.addListener('ready', ({ device_id }) => {
+                    console.log('Spotify Player Ready with Device ID', device_id);
+                    deviceIdRef.current = device_id;
+                    setPlayerReady(true);
+                });
 
-            player.addListener('not_ready', ({ device_id }) => {
-                console.log('Device ID has gone offline', device_id);
-                setPlayerReady(false);
-            });
+                player.addListener('not_ready', ({ device_id }) => {
+                    console.log('Device ID has gone offline', device_id);
+                    setPlayerReady(false);
+                });
 
-            player.addListener('player_state_changed', state => {
-                if (!state) return;
-                setIsPlaying(!state.paused);
-            });
+                player.addListener('player_state_changed', state => {
+                    if (!state) return;
+                    setIsPlaying(!state.paused);
+                });
 
-            player.connect().then(success => {
-                if (success) {
-                    console.log('Spotify player connected successfully');
-                }
-            });
+                player.connect().then(success => {
+                    if (success) {
+                        console.log('Spotify player connected successfully');
+                    }
+                });
+
+                return () => {
+                    player.disconnect();
+                };
+            };
 
             return () => {
-                player.disconnect();
+                document.body.removeChild(script);
+                if (playerRef.current) {
+                    playerRef.current.disconnect();
+                }
             };
-        };
+        }
+        else{
+            console.log("Product not premium");
+        }
 
-        return () => {
-            document.body.removeChild(script);
-            if (playerRef.current) {
-                playerRef.current.disconnect();
-            }
-        };
+
     }, []);
 
     // Transfer playback to our player when it's ready
@@ -491,7 +501,11 @@ export function SongsCard(props) {
             {/*</div>*/}
             <div id="playControls"
                  className="card w-96 bg-white/10 mt-4 backdrop-blur-md border border-white/10 shadow-xl m-0">
+
+
+
                 <div className="card-body">
+                    {premium ? (
                     <div className="flex items-center justify-center gap-4">
                         <button
                             onClick={togglePlayback}
@@ -520,6 +534,10 @@ export function SongsCard(props) {
                             <div className="text-sm opacity-80">{trackArtist}</div>
                         </div>
                     </div>
+
+                    ) : (
+                        <div className="text-lg font-semibold">Track Player requires premium subscription</div>
+                    )}
 
                     {!playerReady && (
                         <div className="text-sm text-warning mt-2">
