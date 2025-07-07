@@ -247,6 +247,7 @@ export function SongsCard(props) {
         }
     });
 
+
     return (
         <div className="relative w-full h-[400px] flex flex-col justify-center items-center">
 
@@ -296,7 +297,6 @@ export function SongsCard(props) {
                 <div className="card-body">
                     <h2 className="card-title">Life hack</h2>
                     <p>How to park your car at your garage?</p>
-
                 </div>
             </div>
         </div>
