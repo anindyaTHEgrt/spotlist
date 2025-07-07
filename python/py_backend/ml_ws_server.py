@@ -109,9 +109,9 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             text = await websocket.receive_text()
-            print("🔹 Raw message:", text)
+            # print("🔹 Raw message:", text)
             data = SwipeData.model_validate_json(text)
-            print("✅ Parsed message:", data)
+            # print("✅ Parsed message:", data)
 
             if data.status == "initial":
                 # print("initial data: " + data.baseVibe)
@@ -120,6 +120,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 # liveness: 0.2, valence: 0.85, tempo: 115, duration_ms: 220000'
 
                 # First time: parse and normalize base vibe
+                print("✅ Parsed message:", data)
                 base_vibe_dict = parse_vibe(data.baseVibe)
                 print("🧠 Parsed base_vibe_dict:", base_vibe_dict)
                 user_vibe_vector = normalize_vibe(base_vibe_dict, scaler, FEATURE_KEYS)
@@ -127,6 +128,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 song_id = recommend_song(user_vibe_vector, feature_matrix, track_ids, exclude_ids)
                 if song_id:
                     exclude_ids.add(song_id)
+                    print("Initial recommendation:", song_id)
                     await websocket.send_json({"recommendation": song_id})
                 else:
                     await websocket.send_json({"error": "No songs left"})
@@ -148,6 +150,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     song_id = recommend_song(user_vibe_vector, feature_matrix, track_ids, exclude_ids)
                     if song_id:
                         exclude_ids.add(song_id)
+                        print("Recommended Song:", song_id)
                         await websocket.send_json({"recommendation": song_id})
                     else:
                         await websocket.send_json({"error": "No songs left"})

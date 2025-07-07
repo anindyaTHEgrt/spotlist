@@ -28,72 +28,97 @@ export function SongsCard(props) {
     const playlistName = props.playlistName;
     const playlistID = props.playlistID;
 
+    // Add safety timeout for loading state
+    useEffect(() => {
+        let timeoutId;
+        if (isLoading) {
+            timeoutId = setTimeout(() => {
+                console.log('⚠️ Loading timeout - clearing loading state');
+                setIsLoading(false);
+                if (pendingSwipeRef.current) {
+                    resetCard();
+                    pendingSwipeRef.current = null;
+                }
+                isSwipeInProgress.current = false;
+            }, 10000); // 10 second timeout
+        }
+        return () => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+        };
+    }, [isLoading]);
+
+    const fetchTrackData = async (recommendation) => {
+        console.log('🚀 Starting to fetch track data for ID:', recommendation);
+        try {
+            const trackData = await axios.get('http://localhost:3001/track/fetchTrack', {
+                params: {
+                    access_token: sessionStorage.getItem("access_token"),
+                    trackID: recommendation
+                }
+            });
+
+            console.log("✅ Track Data received:", trackData.data);
+            setTrackUri(trackData.data.trackUri);
+
+            const trackInfo = {
+                image: trackData.data.trackImg || TrackBG,
+                name: trackData.data.trackName || "Unknown Track",
+                artist: trackData.data.trackArtists || "Unknown Artist"
+            };
+
+            // Always update the UI immediately when new data arrives
+            console.log('🎵 Updating UI with new track:', trackInfo.name);
+            setTrackImage(trackInfo.image);
+            setTrackName(trackInfo.name);
+            setTrackArtist(trackInfo.artist);
+
+            if (!isFirstTrackLoaded.current) {
+                console.log('🎯 First track loaded');
+                isFirstTrackLoaded.current = true;
+            }
+
+            // Clear loading state and reset card position
+            console.log('✅ Clearing loading state');
+            setIsLoading(false);
+            isSwipeInProgress.current = false; // Reset swipe progress
+
+            if (pendingSwipeRef.current) {
+                console.log('🔄 Resetting card position');
+                resetCard();
+                pendingSwipeRef.current = null;
+            }
+
+        } catch (error) {
+            console.error("❌ Error fetching track:", error);
+
+            // Set fallback data on error
+            setTrackImage(TrackBG);
+            setTrackName("Error loading track");
+            setTrackArtist("Please try again");
+
+            if (!isFirstTrackLoaded.current) {
+                isFirstTrackLoaded.current = true;
+            }
+
+            setIsLoading(false);
+            isSwipeInProgress.current = false; // Reset swipe progress
+
+            if (pendingSwipeRef.current) {
+                resetCard();
+                pendingSwipeRef.current = null;
+            }
+        }
+    };
+
     const socketRef = useSocket((data) => {
         console.log('🔥 ML Response received: ', data);
         console.log('🔥 Recommendation ID: ', data.recommendation);
         setRecommendedTrackID(data.recommendation);
         latestRecommendedID.current = data.recommendation;
 
-        const fetchTrackData = async () => {
-            console.log('🚀 Starting to fetch track data for ID:', data.recommendation);
-            try {
-                const trackData = await axios.get('http://localhost:3001/track/fetchTrack', {
-                    params: {
-                        access_token: sessionStorage.getItem("access_token"),
-                        trackID: data.recommendation
-                    }
-                });
-
-                console.log("✅ Track Data received:", trackData.data);
-                setTrackUri(trackData.data.trackUri);
-
-                const trackInfo = {
-                    image: trackData.data.trackImg || TrackBG,
-                    name: trackData.data.trackName || "Unknown Track",
-                    artist: trackData.data.trackArtists || "Unknown Artist"
-                };
-
-                // Always update the UI immediately when new data arrives
-                console.log('🎵 Updating UI with new track:', trackInfo.name);
-                setTrackImage(trackInfo.image);
-                setTrackName(trackInfo.name);
-                setTrackArtist(trackInfo.artist);
-
-                if (!isFirstTrackLoaded.current) {
-                    console.log('🎯 First track loaded');
-                    isFirstTrackLoaded.current = true;
-                }
-
-                // Clear loading state and reset card position
-                console.log('✅ Clearing loading state');
-                setIsLoading(false);
-                if (pendingSwipeRef.current) {
-                    console.log('🔄 Resetting card position');
-                    resetCard();
-                    pendingSwipeRef.current = null;
-                }
-
-            } catch (error) {
-                console.error("❌ Error fetching track:", error);
-
-                // Set fallback data on error
-                setTrackImage(TrackBG);
-                setTrackName("Error loading track");
-                setTrackArtist("Please try again");
-
-                if (!isFirstTrackLoaded.current) {
-                    isFirstTrackLoaded.current = true;
-                }
-
-                setIsLoading(false);
-                if (pendingSwipeRef.current) {
-                    resetCard();
-                    pendingSwipeRef.current = null;
-                }
-            }
-        };
-
-        fetchTrackData();
+       const fetched =  fetchTrackData(data.recommendation);
     });
 
     const sendToPlaylist = async (playlistId) => {
@@ -137,48 +162,64 @@ export function SongsCard(props) {
             return;
         }
 
+        console.log(`🎯 Processing ${direction} swipe`);
         isSwipeInProgress.current = true;
         pendingSwipeRef.current = direction;
         setIsLoading(true); // Show loading state immediately
 
-        // Handle different swipe directions
-        if (direction === "right") {
-            setAlertStatus("info");
-            setAlertContent("👍 Great! More songs like this.");
-        } else if (direction === "left") {
-            setAlertStatus("warning");
-            setAlertContent("👎 Got it! Less songs like this.");
-        } else if (direction === "up") {
-            console.log(`Adding to playlist: ${playlistName}`);
-            const success = await sendToPlaylist(playlistID);
+        try {
+            // Handle different swipe directions
+            if (direction === "right") {
+                setAlertStatus("info");
+                setAlertContent("👍 Great! More songs like this.");
+            } else if (direction === "left") {
+                setAlertStatus("warning");
+                setAlertContent("👎 Got it! Less songs like this.");
+            } else if (direction === "up") {
+                console.log(`Adding to playlist: ${playlistName}`);
+                const success = await sendToPlaylist(playlistID);
 
-            if (success) {
-                setAlertStatus("success");
-                setAlertContent(`⭐ Added to playlist: ${playlistName}!`);
-            } else {
-                setAlertStatus("error");
-                setAlertContent("❌ Failed to add to playlist. Try again.");
+                if (success) {
+                    setAlertStatus("success");
+                    setAlertContent(`⭐ Added to playlist: ${playlistName}!`);
+                } else {
+                    setAlertStatus("error");
+                    setAlertContent("❌ Failed to add to playlist. Try again.");
+                }
             }
-        }
 
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000);
+            // Show alert
+            setShowAlert(true);
+            setTimeout(() => setShowAlert(false), 3000);
 
-        // Send swipe data to backend
-        // Send swipe data to backend
-        const swipeData = {
-            status: "swipeData",
-            baseVibe: baseVibe,
-            swipe: direction,
-            songId: latestRecommendedID.current,
-        };
-        console.log('📤 Sending swipe data to backend:', swipeData);
-        socketRef.current.emit('swipe_event', swipeData);
+            // Send swipe data to backend
+            const swipeData = {
+                status: "swipeData",
+                baseVibe: baseVibe,
+                swipe: direction,
+                songId: latestRecommendedID.current,
+            };
+            console.log('📤 Sending swipe data to backend:', swipeData);
+            socketRef.current.emit('swipe_event', swipeData);
 
-        // Reset swipe progress after a short delay
-        setTimeout(() => {
+        } catch (error) {
+            console.error('❌ Error in handleSwipe:', error);
+
+            // Clear loading state on error
+            setIsLoading(false);
             isSwipeInProgress.current = false;
-        }, 500);
+
+            if (pendingSwipeRef.current) {
+                resetCard();
+                pendingSwipeRef.current = null;
+            }
+
+            // Show error alert
+            setAlertStatus("error");
+            setAlertContent("❌ Something went wrong. Please try again.");
+            setShowAlert(true);
+            setTimeout(() => setShowAlert(false), 3000);
+        }
     };
 
     const [{ x, y, rotateZ, scale }, api] = useSpring(() => ({
@@ -247,9 +288,29 @@ export function SongsCard(props) {
         }
     });
 
+    // Debug button (remove in production)
+    const handleDebugClearLoading = () => {
+        console.log('🔧 DEBUG: Manually clearing loading state');
+        setIsLoading(false);
+        isSwipeInProgress.current = false;
+        if (pendingSwipeRef.current) {
+            resetCard();
+            pendingSwipeRef.current = null;
+        }
+    };
 
     return (
         <div className="relative w-full h-[400px] flex flex-col justify-center items-center">
+
+            {/* Debug button - remove in production */}
+            {isLoading && (
+                <button
+                    onClick={handleDebugClearLoading}
+                    className="absolute top-0 right-0 z-50 bg-red-500 text-white px-2 py-1 rounded text-xs"
+                >
+                    Clear Loading
+                </button>
+            )}
 
             {showAlert && (
                 <div
