@@ -4,6 +4,7 @@ import {useSearchParams, useLocation} from "react-router";
 import SS_H_BG from "../media_assets/swipesong_hero_bg2.jpeg"
 import TrackBG from "../media_assets/swipesong_hero_bg.jpeg"
 import {SongsCard} from "../components/SongsCard.jsx";
+import Intro from "../components/Intro.jsx"
 import useSocket from '../FE_utils/useSocket.js'
 
 const Songswipe = () => {
@@ -21,6 +22,7 @@ const Songswipe = () => {
         playlistID
     }
 
+
     return (
         <div>
             <div
@@ -29,7 +31,11 @@ const Songswipe = () => {
                     backgroundImage: `url(${SS_H_BG})`,
                 }}>
                 <div className="hero-overlay bg-opacity-0"></div>
-                <div className="hero-content flex flex-col items-center space-y-20  text-neutral-content text-center">
+
+                <Intro/>
+
+                <div
+                    className="hero-content flex flex-col items-center space-y-20  text-neutral-content text-center">
                     <p className="text-sm mb-0">Now Playing</p>
                     <SongsCard {...propsData} />
 
@@ -47,4 +53,4 @@ const Songswipe = () => {
         </div>
     );
 }
-export default Songswipe;
+    export default Songswipe;

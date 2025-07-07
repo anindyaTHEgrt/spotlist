@@ -4,6 +4,7 @@ import Callback from '../pages/Callback.jsx';
 // import handleLogin from '../FE_utils/handleLogin.jsx'
 import { AuthContext } from "../context/AuthContext";
 
+import Logo from '../media_assets/spotlist-high-resolution-logo-transparent.png';
 
 function Navbar() {
   const { isLoggedIn, logout } = useContext(AuthContext);
@@ -23,9 +24,12 @@ function Navbar() {
 
     </div>
   </div>
-  <div className="navbar-center">
-    <a className="btn btn-ghost text-xl md:text-md lg:text-3xl">SpotList</a>
-  </div>
+        <div className="navbar-center">
+          {/*<img src={Logo} alt="logo" className="h-10 w-auto object-contain"/>*/}
+          <a href="/" className="btn btn-ghost text-xl md:text-2xl lg:text-3xl flex items-center gap-2">
+            <img src={Logo} alt="logo" className="h-10 w-auto object-contain"/>
+          </a>
+        </div>
         <div className="navbar-end">
 
           {isLoggedIn ? (

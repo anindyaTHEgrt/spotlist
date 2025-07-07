@@ -6,6 +6,9 @@ import { AuthContext } from "../context/AuthContext";
 // import {fetchUserProfile} from "../../../backend/utils/fetchUserProfile.js"
 import axios from "axios";
 
+import Logo from '../media_assets/spotlist-high-resolution-logo-transparent.png';
+
+
 const Callback = () => {
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
@@ -62,7 +65,28 @@ const Callback = () => {
         }
     }, [login, navigate]);
 
-    return <p>Authenticating with Spotify...</p>;
+    return (
+        <div
+            className="mt-4 flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+            {/* Logo */}
+            <img
+                src={Logo}
+                alt="SpotList Logo"
+                className="h-16 w-auto mb-6 sm:h-20"
+            />
+
+            {/* Spinner */}
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-white border-opacity-60 mb-6"></div>
+
+            {/* Text */}
+            <h2 className="text-xl sm:text-2xl font-bold animate-pulse text-center">
+                Authenticating with Spotify...
+            </h2>
+            <p className="text-sm sm:text-base mt-2 text-center opacity-80">
+                Please wait while we sync your vibe 🎧
+            </p>
+        </div>
+    );
 };
 
 export default Callback;
