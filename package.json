@@ -1,0 +1,28 @@
+{
+  "name": "mern-course",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend && python3.11 -m pip install -r requirements.txt",
+    "start": "node start-services.js",
+    "server": "npm run dev --prefix backend",
+    "client": "npm run dev --prefix frontend",
+    "python": "python ml_ws_server.py",
+    "install:backend": "npm install --prefix backend",
+    "install:frontend": "npm install --prefix frontend",
+    "install:python": "pip install -r requirements.txt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anindyaTHEgrt/Spotify_Swipe.git"
+  },
+  "keywords": ["mern", "spotify", "music", "react", "nodejs", "python", "websocket", "ml"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/anindyaTHEgrt/Spotify_Swipe/issues"
+  },
+  "homepage": "https://github.com/anindyaTHEgrt/Spotify_Swipe#readme",
+  "description": ""
+}
