@@ -10,7 +10,7 @@ function Navbar() {
   const { isLoggedIn, logout } = useContext(AuthContext);
   const handleLogin = () => {
     const clientId = "16bc716aa6a84db3979d3afff7051ac2";
-    const redirectUri = import.meta.env.MODE === 'development'? "http://127.0.0.1:5174/callback" : '/callback';
+    const redirectUri = import.meta.env.MODE === 'development'? "http://127.0.0.1:5174/callback" : 'https://spotlist.onrender.com//callback';
     const scope = "streaming user-read-playback-state user-modify-playback-state user-read-private user-read-email user-library-read playlist-modify-public playlist-modify-private";
 
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&show_dialog=true`;
