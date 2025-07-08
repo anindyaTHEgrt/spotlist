@@ -28,7 +28,7 @@ elif python --version | grep -q "3.11"; then
     python -m venv venv
     source venv/bin/activate
     pip install --upgrade pip setuptools wheel
-    pip install -r python/python_backend/requirements.txt
+    pip install -r python/py_backend/requirements.txt
 else
     echo "Using system Python with compatibility fixes..."
     python -m venv venv
