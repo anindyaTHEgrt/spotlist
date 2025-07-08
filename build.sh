@@ -22,7 +22,7 @@ if command -v python3.11 &> /dev/null; then
     python3.11 -m venv venv
     source venv/bin/activate
     pip install --upgrade pip setuptools wheel
-    pip install -r python/python_backend/requirements.txt
+    pip install -r python/py_backend/requirements.txt
 elif python --version | grep -q "3.11"; then
     echo "Using system Python 3.11..."
     python -m venv venv
