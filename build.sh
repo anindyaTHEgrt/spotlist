@@ -13,16 +13,16 @@ npm install --prefix frontend
 echo "Building frontend..."
 npm run build --prefix frontend
 
-# Python setup - DON'T create virtual environment on Render
-echo "Installing Python packages globally..."
+# Python setup for Render
+echo "Installing Python packages..."
 
 # Check if requirements.txt exists
 if [ -f "python/py_backend/requirements.txt" ]; then
     echo "Found requirements.txt, installing packages..."
-    pip3 install --user -r python/py_backend/requirements.txt
+    pip3 install -r python/py_backend/requirements.txt
 else
     echo "No requirements.txt found, installing essential packages..."
-    pip3 install --user fastapi uvicorn websockets pydantic numpy scikit-learn joblib
+    pip3 install fastapi uvicorn websockets pydantic numpy scikit-learn joblib
 fi
 
 # Verify installation
