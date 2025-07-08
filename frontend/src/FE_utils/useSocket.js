@@ -11,7 +11,14 @@ const useSocket = (onMLResponse) => {
     }, [onMLResponse]);
 
     useEffect(() => {
-        socketRef.current = io("http://localhost:3001");
+
+        // Use production URL or development URL
+        const socketURL = import.meta.env.MODE === 'development'
+            ? "http://localhost:3001"
+            : window.location.origin;
+
+
+        socketRef.current = io(socketURL);
 
         socketRef.current.on("connect", () => {
             console.log("✅ Connected to backend socket");
@@ -21,6 +28,10 @@ const useSocket = (onMLResponse) => {
         socketRef.current.on("ml_response", (data) => {
             console.log("📥 Received ml_response:", data);
             callbackRef.current?.(data);
+        });
+
+        socketRef.current.on("disconnect", () => {
+            console.log("❌ Disconnected from backend socket");
         });
 
         return () => {
