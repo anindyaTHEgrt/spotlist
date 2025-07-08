@@ -113,7 +113,7 @@ connectDB();
 // });
 
 // Python WebSocket configuration
-const PYTHON_WS_URL = process.env.PYTHON_WS_URL || 'ws://localhost:8001/ws';
+const PYTHON_WS_URL = process.env.PYTHON_WS_URL || 'ws://localhost:8000/ws';
 let pySocket = null;
 
 function connectToPython() {
