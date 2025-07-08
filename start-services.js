@@ -8,8 +8,8 @@ const backend = spawn('npm', ['start'], {
 });
 
 // Start Python WebSocket server (located in python/python_backend directory)
-const python = spawn('python', ['ml_ws_server.py'], {
-    cwd: path.join(__dirname, 'python3', 'py_backend'),
+const python = spawn('python3', ['ml_ws_server.py'], {
+    cwd: path.join(__dirname, 'python', 'py_backend'),
     stdio: 'inherit'
 });
 
