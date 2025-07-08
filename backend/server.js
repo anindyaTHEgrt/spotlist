@@ -43,12 +43,12 @@ const path = require("node:path");
 
 
 app.use(express.json());
-// app.use("/api", CredLoginRoutes);
-// app.use("/db", dbUserFunctionRoutes);
-// app.use("/playlist", PlaylistFunctionRoutes);
-// app.use("/user", fetchUserRoute);
-// app.use("/intel", aiRoutes);
-// app.use("/track", trackRoutes);
+app.use("/api", CredLoginRoutes);
+app.use("/db", dbUserFunctionRoutes);
+app.use("/playlist", PlaylistFunctionRoutes);
+app.use("/user", fetchUserRoute);
+app.use("/intel", aiRoutes);
+app.use("/track", trackRoutes);
 
 // Health check endpoint for Render
 app.get('/health', (req, res) => {
@@ -59,13 +59,16 @@ app.get('/health', (req, res) => {
     });
 });
 
-if(process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-    })
-}
+// if(process.env.NODE_ENV === 'production') {
+//     app.use(express.static(path.join(__dirname, '../frontend/dist')));
+//
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+//     })
+// }
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 
 const clientId = process.env.CLIENT_ID;
