@@ -43,12 +43,12 @@ const path = require("node:path");
 
 
 app.use(express.json());
-app.use("/api", CredLoginRoutes);
-app.use("/db", dbUserFunctionRoutes);
-app.use("/playlist", PlaylistFunctionRoutes);
-app.use("/user", fetchUserRoute);
-app.use("/intel", aiRoutes);
-app.use("/track", trackRoutes);
+// app.use("/api", CredLoginRoutes);
+// app.use("/db", dbUserFunctionRoutes);
+// app.use("/playlist", PlaylistFunctionRoutes);
+// app.use("/user", fetchUserRoute);
+// app.use("/intel", aiRoutes);
+// app.use("/track", trackRoutes);
 
 // Health check endpoint for Render
 app.get('/health', (req, res) => {
