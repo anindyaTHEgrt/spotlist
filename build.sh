@@ -16,6 +16,9 @@ npm run build --prefix frontend
 # Python setup for Render
 echo "Installing Python packages..."
 
+# First ensure setuptools is installed
+pip3 install --upgrade pip setuptools wheel
+
 # Check if requirements.txt exists
 if [ -f "python/py_backend/requirements.txt" ]; then
     echo "Found requirements.txt, installing packages..."
