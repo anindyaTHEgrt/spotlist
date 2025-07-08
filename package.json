@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "./build.sh",
+    "build": "chmod +x build.sh && ./build.sh",
     "start": "cd backend && npm start",
     "dev": "cd backend && npm run dev",
-    "install-all": "cd backend && npm install && cd ../frontend && npm install"
+    "install-all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev-frontend": "cd frontend && npm run dev",
+    "dev-backend": "cd backend && npm run dev"
   },
   "repository": {
     "type": "git",
