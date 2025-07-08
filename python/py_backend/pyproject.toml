@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ml-ws-server"
+version = "0.1.0"
+description = "ML WebSocket Server for Music Recommendations"
+readme = "README.md"
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.20.0",
+    "pydantic>=2.0.0",
+    "numpy>=1.21.0",
+    "scikit-learn>=1.0.0",
+    "joblib>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black",
+    "flake8",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/ml-ws-server"
+Repository = "https://github.com/yourusername/ml-ws-server"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*.py"]
+
+[tool.setuptools.package-data]
+"*" = ["*.npy", "*.pkl"]
