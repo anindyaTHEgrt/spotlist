@@ -5,7 +5,9 @@ require('dotenv').config();
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-const redirect_uri = 'http://127.0.0.1:5174/callback';
+// const redirect_uri = 'http://127.0.0.1:5174/callback';
+const redirect_uri = 'https://spotlist.onrender.com/callback';
+
 
 
 const createToken = async (code) =>{
