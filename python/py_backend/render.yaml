@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: spotlist-ws-server
-    runtime: python
-    buildCommand: pip install -r requirements.txt
+    name: ml-ws-server
+    env: python
+    rootDir: python/py_backend
+    buildCommand: chmod +x build.sh && ./build.sh
     startCommand: python ml_ws_server.py
     envVars:
       - key: PORT
         value: 10000
-
