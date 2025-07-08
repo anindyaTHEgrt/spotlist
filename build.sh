@@ -1,37 +1,30 @@
 #!/bin/bash
-set -e  # Exit on any error
+set -e
 
-echo "Starting build process..."
+echo "📦 Starting build process..."
+echo "Current directory: $(pwd)"
 
-# Install Node.js dependencies
-echo "Installing backend dependencies..."
+echo "📦 Installing backend dependencies..."
 npm install --prefix backend
 
-echo "Installing frontend dependencies..."
+echo "📦 Installing frontend dependencies..."
 npm install --prefix frontend
 
-echo "Building frontend..."
+echo "🛠️ Building frontend..."
 npm run build --prefix frontend
 
-# Python setup for Render
-echo "Installing Python packages..."
-
-# First ensure setuptools is installed
+echo "🐍 Installing Python packages..."
 pip3 install --upgrade pip setuptools wheel
 
-# Check if requirements.txt exists
-if [ -f "python/py_backend/requirements.txt" ]; then
-    echo "Found requirements.txt, installing packages..."
-    pip3 install -r python/py_backend/requirements.txt
+REQ_FILE="python/py_backend/requirements.txt"
+
+if [ -f "$REQ_FILE" ]; then
+    echo "📄 Found requirements.txt, installing..."
+    pip3 install -r "$REQ_FILE"
 else
-    echo "No requirements.txt found, installing essential packages..."
+    echo "⚠️ No requirements.txt found, installing base packages"
     pip3 install fastapi uvicorn websockets pydantic numpy scikit-learn joblib
 fi
 
-# Verify installation
-echo "Verifying Python package installation..."
-python3 -c "import fastapi; print('✅ FastAPI installed successfully')" || echo "❌ FastAPI installation failed"
-python3 -c "import uvicorn; print('✅ Uvicorn installed successfully')" || echo "❌ Uvicorn installation failed"
-python3 -c "import websockets; print('✅ WebSockets installed successfully')" || echo "❌ WebSockets installation failed"
-
-echo "Build completed successfully!"
+echo "✅ Python package verification:"
+python3 -c "import fastapi; print('✅ FastAPI installed')" || echo "❌ FastAPI missing"

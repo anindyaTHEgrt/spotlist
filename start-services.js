@@ -17,14 +17,14 @@ const backend = spawn('npm', ['start'], {
 process.on('SIGINT', () => {
     console.log('\nShutting down services...');
     backend.kill('SIGTERM');
-    python.kill('SIGTERM');
+    // python.kill('SIGTERM');
     process.exit(0);
 });
 
 process.on('SIGTERM', () => {
     console.log('Received SIGTERM, shutting down services...');
     backend.kill('SIGTERM');
-    python.kill('SIGTERM');
+    // python.kill('SIGTERM');
     process.exit(0);
 });
 
