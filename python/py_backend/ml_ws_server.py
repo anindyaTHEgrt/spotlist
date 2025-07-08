@@ -39,9 +39,15 @@ SWIPE_WEIGHTS = {
 }
 
 # --- Load Dataset Once ---
-feature_matrix = np.load("../py_ML/features.npy", allow_pickle=True)                # shape (N, 12)
-track_ids = np.load("../py_ML/track_ids.npy", allow_pickle=True)                    # shape (N,)
-scaler = joblib.load("../py_ML/scaler.pkl")
+# feature_matrix = np.load("../py_ML/features.npy", allow_pickle=True)                # shape (N, 12)
+# track_ids = np.load("../py_ML/track_ids.npy", allow_pickle=True)                    # shape (N,)
+# scaler = joblib.load("../py_ML/scaler.pkl")
+
+import os
+base_dir = os.path.dirname(os.path.abspath(__file__))
+feature_matrix = np.load(os.path.join(base_dir, "../py_ML/features.npy"), allow_pickle=True)
+track_ids = np.load(os.path.join(base_dir, "../py_ML/track_ids.npy"), allow_pickle=True)
+scaler = joblib.load(os.path.join(base_dir, "../py_ML/scaler.pkl"))
 
 # --- Helpers ---
 # def parse_vibe(vibe_str: str) -> dict:
