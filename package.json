@@ -1,16 +1,12 @@
 {
-  "name": "mern-course",
+  "name": "spotlist-app",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "chmod +x build.sh && ./build.sh",
-    "start": "node start-services.js",
-    "server": "npm run dev --prefix backend",
-    "client": "npm run dev --prefix frontend",
-    "python": "python ml_ws_server.py",
-    "install:backend": "npm install --prefix backend",
-    "install:frontend": "npm install --prefix frontend",
-    "install:python": "pip install -r requirements.txt"
+    "build": "./build.sh",
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev",
+    "install-all": "cd backend && npm install && cd ../frontend && npm install"
   },
   "repository": {
     "type": "git",
