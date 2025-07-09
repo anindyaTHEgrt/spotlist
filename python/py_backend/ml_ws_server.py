@@ -105,6 +105,11 @@ class SwipeData(BaseModel):
     swipe: str
     songId: str
 
+@app.get("/ws/health")
+async def healthcheck():
+    return {"Websocket status": "alive"}
+
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()

@@ -51,13 +51,30 @@ app.use("/intel", aiRoutes);
 app.use("/track", trackRoutes);
 
 // Health check endpoint for Render
-app.get('/health', (req, res) => {
+// app.get('/health', (req, res) => {
+//     res.status(200).json({
+//         status: 'OK',
+//         timestamp: new Date().toISOString(),
+//         python_ws_status: pySocket && pySocket.readyState === WebSocket.OPEN ? 'connected' : 'disconnected'
+//     });
+// });
+
+app.get('/health', async (req, res) => {
+    // Attempt to wake up Python FastAPI server
+    try {
+        const pythonPing = await axios.get('https://spotlist-ws.onrender.com/ws/health');
+        console.log('🐍 FastAPI healthcheck status:', pythonPing.data.status);
+    } catch (err) {
+        console.warn('⚠️ Could not reach FastAPI healthcheck:', err.message);
+    }
+
     res.status(200).json({
         status: 'OK',
         timestamp: new Date().toISOString(),
         python_ws_status: pySocket && pySocket.readyState === WebSocket.OPEN ? 'connected' : 'disconnected'
     });
 });
+
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../frontend/dist')));
