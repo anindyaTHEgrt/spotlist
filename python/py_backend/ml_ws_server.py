@@ -107,7 +107,7 @@ class SwipeData(BaseModel):
 
 @app.get("/ws/health")
 async def healthcheck():
-    return {"Websocket status": "alive"}
+    return {"status": "alive"}
 
 
 @app.websocket("/ws")
