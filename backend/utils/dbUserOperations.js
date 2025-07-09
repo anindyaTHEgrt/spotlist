@@ -31,7 +31,7 @@ const registerUser = async (profile, accesstoken) => {
     const name= profile.display_name    ;
     const email= profile.email;
     const id = profile.id;
-    const profileImgUrl = profile.images[0].url;
+    const profileImgUrl = profile.images && profile.images.length > 0 ? profile.images[0].url : null;
     const productType = profile.product;
     const userHref = profile.href;
     const accessToken = accesstoken;
